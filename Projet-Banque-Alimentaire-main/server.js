@@ -648,7 +648,7 @@ app.get('/testingngchangesform', (req, res) => {
   res.render("formtest");
 });
 // Route pour afficher la page d'inscription
-app.get('/register', (req, res) => {
+app.get('/register', checkAuthenticated, (req, res) => {
   res.render('register.ejs');
 });
 
