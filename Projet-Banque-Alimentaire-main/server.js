@@ -57,7 +57,7 @@ const startNodemonAndBrowserSync = () => {
 
 app.get('/', async (req, res) => {
   try {
-    SERVICES = await db_utilities.getDataFrom("Services");
+    SERVICES = await db_utilities.getDataFrom("services");
     res.render('welcome_page', { services: SERVICES });
   } catch (error) {
 
@@ -68,7 +68,7 @@ app.get('/', async (req, res) => {
 
 app.get('/service', async (req, res) => {
   try {
-    SERVICES = await db_utilities.getDataFrom("Services");
+    SERVICES = await db_utilities.getDataFrom("services");
     res.render('service', { services: SERVICES });
   } catch (error) {
 
@@ -79,7 +79,7 @@ app.get('/service', async (req, res) => {
 
 app.get("/info_liste_famille", async (req, res) => {
   try {
-    const particularitiesR = await db_utilities.getDataFrom("Particularity", "Name");
+    const particularitiesR = await db_utilities.getDataFrom("particularity", "Name");
     const particularities = particularitiesR.map(result => result.Name);
     res.render("search", { particularities });
   } catch (error) {
@@ -91,7 +91,7 @@ app.get("/info_liste_famille", async (req, res) => {
 app.get("/api/locations", async (req, res) => {
   try {
 
-    offices = await db_utilities.getDataFrom("OfficeInfo");
+    offices = await db_utilities.getDataFrom("officeInfo");
     res.json(offices);
   } catch (error) {
     console.error('Error fetching locations:', error);
@@ -105,13 +105,13 @@ app.get("/api/subscriptions/:locid", async (req, res) => {
     const conditionsLoc = {
       Id: parseInt(locationId)
     };
-    LOCATION = await db_utilities.getDataFrom("OfficeInfo", conditionsLoc);
+    LOCATION = await db_utilities.getDataFrom("officeInfo", conditionsLoc);
     if (LOCATION) {
 
       const conditions = {
         Location: LOCATION[0].Name,
       };
-      subscriptions = await db_utilities.getDataFrom("Abonnement", conditions);
+      subscriptions = await db_utilities.getDataFrom("abonnement", conditions);
       res.json(subscriptions);
     }
   } catch (error) {
@@ -127,7 +127,7 @@ app.get("/api/clients/:subId", async (req, res) => {
     const conditions = {
       Id: Id,
     };
-    SUBSCRIPTION = await db_utilities.getDataFrom("Abonnement", conditions);
+    SUBSCRIPTION = await db_utilities.getDataFrom("abonnement", conditions);
     console.log(SUBSCRIPTION);
     familyIdList = SUBSCRIPTION[0].FamilyMembers.split(',');
     Members = [];
@@ -136,7 +136,7 @@ app.get("/api/clients/:subId", async (req, res) => {
       const CONDITION = {
         Id: parseInt(familyIdList[i])
       }
-      person = await db_utilities.getDataFrom("Personnes", CONDITION);
+      person = await db_utilities.getDataFrom("personnes", CONDITION);
 
       Members.push(person[0]);
     }
@@ -164,7 +164,7 @@ app.get("/api/getUserType", async (req, res) => {
 app.get("/api/services", async (req, res) => {
   try {
 
-    service = await db_utilities.getDataFrom("Services");
+    service = await db_utilities.getDataFrom("services");
     res.json(service);
   } catch (error) {
     console.error('Error fetching services:', error);
@@ -175,7 +175,7 @@ app.get("/api/services", async (req, res) => {
 app.get("/api/employees", async (req, res) => {
   try {
 
-    users = await db_utilities.getDataFrom("Users");
+    users = await db_utilities.getDataFrom("users");
     res.json(users);
   } catch (error) {
     console.error('Error fetching services:', error);
@@ -200,7 +200,7 @@ app.get('/api/data', async function (req, res) {
 app.get("/inscription_famille", async (req, res) => {
   try {
     const [particularities] = await Promise.all([
-      db_utilities.getDataFrom("Particularity"),
+      db_utilities.getDataFrom("particularity"),
     ]);
     res.render("family_subscription", {
       titrePage: "Inscription_Famille",
@@ -258,7 +258,7 @@ app.post("/inscription_famille", async (req, res) => {
     }
     console.log(MainMember);
     const [locations] = await Promise.all([
-      db_utilities.getDataFrom("OfficeInfo"),
+      db_utilities.getDataFrom("officeInfo"),
     ]);
     res.render("family_subscription_info", {
       titrePage: "Inscription_Famille",
@@ -282,7 +282,7 @@ app.post("/ajout_membres", async (req, res) => {
     const sexe = inputData.Sexe;
     const mainMemberParticularities = inputData.selectedParticularities;
     const [particularities] = await Promise.all([
-      db_utilities.getDataFrom("Particularity"),
+      db_utilities.getDataFrom("particularity"),
     ]);
     const officeLocation = inputData.officeLocation;
     const address = inputData.adresse;
@@ -328,7 +328,7 @@ app.post("/abonnement_termine", async (req, res) => {
       memberList.splice(0, 1);
       if (subscriptionInserted) {
         const queryCondition = { Email: subscription_data.Email };
-        SubscriptionData = await db_utilities.getDataFrom("Abonnement", queryCondition);
+        SubscriptionData = await db_utilities.getDataFrom("abonnement", queryCondition);
         console.log("ID Sub = " + SubscriptionData[0].Id);
         parti = MainMember.particularities;
         //Create User using the informations we have here. (No sex cuz i forgot);
@@ -344,7 +344,7 @@ app.post("/abonnement_termine", async (req, res) => {
         try {
           const inserted = await db_utilities.insertInto('personnes', maindata);
           if (inserted) {
-            const MainMemberData = await db_utilities.getDataFrom("Personnes", maindata);
+            const MainMemberData = await db_utilities.getDataFrom("personnes", maindata);
             familyMemberIds.push(MainMemberData[0].Id);
 
             for (member of memberList) {
@@ -381,7 +381,7 @@ app.post("/abonnement_termine", async (req, res) => {
                 if (inserted) {
 
 
-                  const memberData = await db_utilities.getDataFrom("Personnes", data);
+                  const memberData = await db_utilities.getDataFrom("personnes", data);
                   familyMemberIds.push(memberData[0].Id);
                   console.log(familyMemberIds);
 
@@ -423,17 +423,17 @@ app.post("/abonnement_termine", async (req, res) => {
                 );
                 res.redirect('/');
               } else {
-                res.json({ message: "Abonnement not found" });
+                res.json({ message: "abonnement not found" });
               }
             } catch (error) {
               console.error("Error updating Abonnement:", error);
 
               const queryCondition = { Id: SubscriptionData[0].Id };
-              await db_utilities.deleteFrom("Abonnement", queryCondition);
+              await db_utilities.deleteFrom("abonnement", queryCondition);
               for (memberX in familyMemberIds) {
 
                 const queryConditionP = { Id: memberX };
-                await db_utilities.deleteFrom("Personnes", queryConditionP);
+                await db_utilities.deleteFrom("personnes", queryConditionP);
               }
 
               res.status(500).json({ message: "Internal server error" });
@@ -443,14 +443,14 @@ app.post("/abonnement_termine", async (req, res) => {
           } else {
             const queryCondition = { Id: SubscriptionData[0].Id };
             res.json({ message: 'Data not inserted' });
-            await db_utilities.deleteFrom("Abonnement", queryCondition);
+            await db_utilities.deleteFrom("abonnement", queryCondition);
           }
 
         } catch (error) {
           const queryCondition = { Id: SubscriptionData[0].Id };
           console.error('Error inserting data:', error);
           res.status(500).json({ message: 'Internal server error' });
-          await db_utilities.deleteFrom("Abonnement", queryCondition);
+          await db_utilities.deleteFrom("abonnement", queryCondition);
         }
 
       }
@@ -502,22 +502,22 @@ app.post("/confirmer_abonnement", async (req, res) => {
   success = false;
   try {
     const queryCondition = { Id: REALCODE.SubId };
-    SubscriptionData = await db_utilities.getDataFrom("Abonnement", queryCondition);
+    SubscriptionData = await db_utilities.getDataFrom("abonnement", queryCondition);
     if (SubscriptionData) {
       if (SubscriptionData[0].Etat == "CompteVierge") {
         if (CONFIRMED == "confirm") {
           const queryCondition = { Id: REALCODE.SubId };
           const updateValues = { Etat: "ConfirmeParEmail" };
-          await db_utilities.updateFrom("Abonnement", updateValues, queryCondition);
+          await db_utilities.updateFrom("abonnement", updateValues, queryCondition);
         } else if (CONFIRMED == "cancel") {
           FAMILYLIST = SubscriptionData[0].FamilyMembers.split(',')
 
           const queryCondition = { Id: SubscriptionData[0].Id };
-          await db_utilities.deleteFrom("Abonnement", queryCondition);
+          await db_utilities.deleteFrom("abonnement", queryCondition);
           for (const memberX of FAMILYLIST) {
 
             const queryConditionP = { Id: parseInt(memberX.trim()) };
-            await db_utilities.deleteFrom("Personnes", queryConditionP);
+            await db_utilities.deleteFrom("personnes", queryConditionP);
           }
         }
         success = CONFIRMED == "confirm";
@@ -1269,7 +1269,7 @@ app.get('/rapport/details_particularites', checkAccountSecretaire, async (req, r
   try {
     const abonnements = await db_utilities.getDataFrom('abonnement');
     const personnes = await db_utilities.getDataFrom('personnes');
-    const commandes = await db_utilities.getDataFrom('Command');
+    const commandes = await db_utilities.getDataFrom('command');
 
     res.render("details_particularites", {
       abonnements, personnes, commandes
