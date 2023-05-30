@@ -815,9 +815,9 @@ app.post('/login', async (req, res) => {
     const conditions = {
       Email: dataReceived.email
     };
-    const userExists = await db_utilities.checkExistFrom("Users", conditions);
+    const userExists = await db_utilities.checkExistFrom("users", conditions);
     if (userExists) {
-      const result = await db_utilities.getDataFrom("Users", conditions);
+      const result = await db_utilities.getDataFrom("users", conditions);
       const passwordMatches = await bcrypt.compare(PASS, result[0].Password);
 
       if (passwordMatches) {
