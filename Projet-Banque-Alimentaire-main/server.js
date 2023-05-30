@@ -798,7 +798,7 @@ app.post('/submit', checkAccountAdmin, async (req, res) => {
 });
 
 
-app.get('/login', checkNotAuthenticated, (req, res) => {
+app.get('/login', (req, res) => {
   res.render('login');
 });
 app.get('/confirmation', (req, res) => {
@@ -807,7 +807,7 @@ app.get('/confirmation', (req, res) => {
 });
 
 
-app.post('/login', checkNotAuthenticated, async (req, res) => {
+app.post('/login', async (req, res) => {
   const dataReceived = req.body;
   //let accountType;
   const PASS = dataReceived.password
