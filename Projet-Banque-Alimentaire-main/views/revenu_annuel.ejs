@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de Revenus Annuels</title>
+
+    <script>
+        function remplirOptionsSemaines() {
+            const semaineSelect = document.getElementById('semaineSelect');
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
+            const currentWeek = getWeekNumber(currentDate);
+
+            for (let i = 1; i <= currentWeek; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.text = `Semaine ${i}`;
+                semaineSelect.add(option);
+            }
+        }
+
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            const weekNo = Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+            return weekNo;
+        }
+
+        function afficherDropdowns() {
+            const rapportAnnuel = document.getElementById('rapportAnnuel');
+            const rapportMensuel = document.getElementById('rapportMensuel');
+            const rapportHebdomadaire = document.getElementById('rapportHebdomadaire');
+            const moisSelect = document.getElementById('moisSelect');
+            const semaineSelect = document.getElementById('semaineSelect');
+
+            if (rapportAnnuel.checked) {
+                moisSelect.style.display = 'none';
+                semaineSelect.style.display = 'none';
+            } else if (rapportMensuel.checked) {
+                moisSelect.style.display = 'inline-block';
+                semaineSelect.style.display = 'none';
+            } else if (rapportHebdomadaire.checked) {
+                moisSelect.style.display = 'none';
+                semaineSelect.style.display = 'inline-block';
+            }
+        }
+
+        function submitFormWithMonth() {
+            const revenuForm = document.getElementById('revenuForm');
+            const moisSelect = document.getElementById('moisSelect');
+            const selectedMonth = moisSelect.value;
+
+            const monthInput = document.createElement('input');
+            monthInput.type = 'hidden';
+            monthInput.name = 'month';
+            monthInput.value = selectedMonth;
+
+            revenuForm.appendChild(monthInput);
+            revenuForm.submit();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('rapportAnnuel').addEventListener('change', afficherDropdowns);
+            document.getElementById('rapportMensuel').addEventListener('change', afficherDropdowns);
+
+            document.getElementById('moisSelect').addEventListener('change', submitFormWithMonth);
+
+            document.getElementById('year').addEventListener('input', function () {
+                const yearInput = this;
+                const rapportMensuel = document.getElementById('rapportMensuel');
+
+                if (yearInput.value === '') {
+                    rapportMensuel.disabled = true;
+                } else {
+                    rapportMensuel.disabled = false;
+                }
+            });
+
+            remplirOptionsSemaines();
+            afficherDropdowns();
+        });
+    </script>
+
+
+</head>
+
+<%- include('./partials/newhead'); %>
+
+    <body>
+        <%- include('./partials/newHeader'); %>
+            <section class="global-page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="block">
+                                <h2>Revenus Annuels: </h2>
+                                <ol class="breadcrumb list-inline text-center">
+                                    <li class="list-inline-item">
+                                        <a href="/">
+                                            <i class="ion-ios-home"></i>
+                                            Accueil &nbsp; &nbsp;/
+                                        </a>
+                                    </li>
+                                    <li class="active list-inline-item">Revenus Annuels</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+			<section id="contact-section">
+				<div class="container">
+            <form id="revenuForm" action="/revenu_annuel" method="POST">
+                <label for="year">Année:</label>
+                <input type="number" name="year" id="year" required>
+                <button type="submit">Afficher les revenus</button>
+            </form>
+            <div>
+                <input type="radio" id="rapportAnnuel" name="rapportType" value="annuel" checked>
+                <label for="rapportAnnuel">Rapport Revenu Par Année</label>
+
+                <input type="radio" id="rapportMensuel" name="rapportType" value="mensuel" disabled>
+                <label for="rapportMensuel">Rapport Revenu Par Mois</label>
+
+
+                <select id="moisSelect" style="display: none;" onchange="submitFormWithMonth()">
+                    <option value="1">Janvier</option>
+                    <option value="2">Février</option>
+                    <option value="3">Mars</option>
+                    <option value="4">Avril</option>
+                    <option value="5">Mai</option>
+                    <option value="6">Juin</option>
+                    <option value="7">Juillet</option>
+                    <option value="8">Août</option>
+                    <option value="9">Septembre</option>
+                    <option value="10">Octobre</option>
+                    <option value="11">Novembre</option>
+                    <option value="12">Décembre</option>
+                </select>
+
+                <select id="semaineSelect" style="display: none;">
+                    <!-- Les options des semaines seront ajoutées dynamiquement par le script -->
+                </select>
+            </div>
+            <div class="export-button-section">
+                <button type="button" class="btn btn-success" onclick="exportExcel()">Exporter en Excel</button>
+                <button type="button" class="btn btn-warning" onclick="exportPDF()">Exporter en PDF</button>
+            </div>
+            <table id="tableRevenuAnnuels">
+                <thead>
+                    <tr>
+                        <% if (isMonthlyReport) { %>
+                            <th>Jour</th>
+                            <% } else { %>
+                                <th>Mois</th>
+                                <% } %>
+                                    <th>Revenu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% let totalRevenu=0; %>
+                        <% if (data) { %>
+                            <% const mois=['Janvier', 'Février' , 'Mars' , 'Avril' , 'Mai' , 'Juin' , 'Juillet' , 'Août'
+                                , 'Septembre' , 'Octobre' , 'Novembre' , 'Décembre' ]; %>
+                                <% data.forEach((row)=> { %>
+                                    <% totalRevenu +=row.Revenu; %>
+                                        <tr>
+                                            <td>
+                                                <% if (isMonthlyReport) { %>
+                                                    <%= row.Jour %>
+                                                        <% } else { %>
+                                                            <%= mois[row.Mois - 1] %>
+                                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <%= row.Revenu.toFixed(2) %> CAD$
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <tr>
+                                                <% if (isMonthlyReport) { %>
+                                                    <th>Total mensuel</th>
+                                                    <% } else { %>
+                                                        <th>Total annuel</th>
+                                                        <% } %>
+                                                            <th>
+                                                                <%= totalRevenu.toFixed(2) %> CAD$
+                                                            </th>
+                                            </tr>
+                                            <% } %>
+                </tbody>
+            </table>
+
+
+        </div>
+
+
+
+    </section>
+
+                <script src="/scripts/revenu_scripts.js"></script>
+            <%- include('./partials/newFooter'); %>
+    </body>
+
+</html>

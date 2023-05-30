@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+
+<%- include('./partials/newhead'); %>
+
+	<body ng-controller="myCtrl">
+		<%- include('./partials/newHeader'); %>
+
+			<!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+			<section class="global-page-header">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="block">
+								<h2>Abonnement</h2>
+								<ol class="breadcrumb list-inline text-center">
+									<li class="list-inline-item">
+										<a href="index.html">
+											<i class="ion-ios-home"></i>
+											Accueil &nbsp; &nbsp;/
+										</a>
+									</li>
+									<li class="active list-inline-item">Abonnement</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section id="contact-section">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-6 mb-5 mb-md-0">
+							<div class="block">
+								<div class="form-container">
+									<h1>Page d'information d'abonnement</h1>
+									<form name="myForm" id="myForm" action="/ajout_membres" method="POST" novalidate>
+
+										<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+											data-wow-delay=".5s">
+
+											<label for="adresse">Adresse :</label>
+											<input type="text" placeholder="Votre Adresse" class="form-control"
+												id="adresse" name="adresse" ng-model="adresse" ng-required="true">
+											<span class="error-message" ng-show="myForm.adresse.$invalid">Veuillez
+												saisir une
+												adresse</span><br>
+										</div>
+										<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+											data-wow-delay=".5s">
+
+											<label for="telephone">Téléphone :</label>
+											<input type="text" placeholder="Votre No# De Téléphone" class="form-control"
+												id="telephone" name="telephone" ng-model="telephone" ng-required="true">
+											<span class="error-message"
+												ng-show="myForm.telephone.$invalid">Veuillez
+												saisir un numéro de
+												téléphone</span><br>
+										</div>
+										<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+											data-wow-delay=".5s">
+
+											<label for="email">Adresse Électronique :</label>
+											<input type="email" placeholder="Votre Email" class="form-control"
+												id="email" name="email" ng-model="email" ng-required="true"> <span class="error-message"
+												ng-show="myForm.email.$invalid">Veuillez saisir
+												une adresse e-mail
+												valide</span><br>
+										</div>
+										<% if (list_location.length> 0) { %>
+											<div>
+												<label for="officeLocation">Succursale :</label>
+												<select id="officeLocation" name="officeLocation"
+													ng-model="formData.officeLocation"  class="form-control" required>
+													<option value="" selected>-- Select an office location --</option>
+													<% list_location.forEach(function(location) { %>
+														<option value="<%= location.Name %>">
+															<%= location.Name %>
+														</option>
+														<% }); %>
+												</select>
+											</div>
+											<% } %>
+												<span class="error-message"
+													ng-show="myForm.location.$invalid">Veuillez
+													sélectionner une
+													succursale</span><br>
+
+
+												<div id="submit" class="wow fadeInDown" data-wow-duration="500ms"
+													data-wow-delay="1.4s">
+														<button type="submit"  ng-click="submitForm()" ng-disabled="myForm.adresse.$invalid || myForm.telephone.$invalid ||myForm.email.$invalid || myForm.officeLocation.$invalid" id="contact-submit" 
+															class="btn btn-default btn-send hvr-bounce-to-right">Suivant</button>
+												</div>
+									</form>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+				</div>
+			</section>
+			<%- include('./partials/newFooter'); %>	
+				 </body>
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function ($scope) {
+			$scope.lastName = '<%= LastName %>';
+			$scope.firstName = '<%= FirstName %>';
+			$scope.birthday = '<%= Birthday %>';
+			$scope.sexe = '<%= Sexe %>';
+			$scope.particularities = JSON.parse('<%- JSON.stringify(Particularities) %>');
+
+
+			$scope.submitForm = function () {
+				if ($scope.myForm.$invalid) {
+					alert('Veuillez remplir tous les champs obligatoires');
+				} else if ($scope.myForm.officeLocation == "") {
+					alert('Veuillez remplir tous les champs obligatoires');
+				} else {
+					alert('Formulaire soumis avec succès');
+
+
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "selectedParticularities";
+					input.value = particularities.join(",");
+					document.myForm.appendChild(input);
+
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "FirstName";
+					input.value = $scope.firstName;
+					document.getElementById('myForm').appendChild(input);
+
+
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "LastName";
+					input.value = $scope.lastName;
+					document.getElementById('myForm').appendChild(input);
+
+
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "Birthday";
+					input.value = $scope.birthday;
+					document.getElementById('myForm').appendChild(input);
+
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "Sexe";
+					input.value = $scope.sexe;
+					document.getElementById('myForm').appendChild(input);
+
+					document.getElementById("myForm").submit();
+				}
+			};
+		});
+	</script>
+
+</html>

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+
+<%- include('./partials/newhead'); %>
+
+	<body ng-controller="myCtrl">
+
+		<%- include('./partials/newHeader'); %>
+
+		<!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+		<section class="global-page-header">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="block">
+							<h2>Abonnement</h2>
+							<ol class="breadcrumb list-inline text-center">
+								<li class="list-inline-item">
+									<a href="index.html">
+										<i class="ion-ios-home"></i>
+										Accueil &nbsp; &nbsp;/
+									</a>
+								</li>
+								<li class="active list-inline-item">Abonnement</li>
+							</ol>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+			<section id="contact-section">
+				<div class="container">
+					<h1>Page d'informations personnelles</h1>
+					<form name="myForm" id="myForm" ng-submit="submitForm()" action="/inscription_famille" method="POST"
+						novalidate>
+						<div class="row">
+							<div class="col-md-6 mb-5 mb-md-0">
+								<div class="block">
+									<br>
+									<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+										data-wow-delay=".3s">
+										<label for="nom">Nom :</label>
+										<input type="text" placeholder="Votre Nom" class="form-control" id="nom"
+											name="nom" ng-model="nom" ng-required="true">
+										<span class="error-message" ng-show="myForm.nom.$invalid">Veuillez saisir un
+											nom</span><br>
+									</div>
+									<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+										data-wow-delay=".5s">
+
+										<label for="prenom">Prénom :</label>
+										<input type="text" placeholder="Votre Prénom" class="form-control" id="prenom"
+											name="prenom" ng-model="prenom" ng-required="true">
+										<span class="error-message" ng-show="myForm.prenom.$invalid">Veuillez saisir
+											un
+											prénom</span><br>
+									</div>
+									<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+										data-wow-delay=".7s">
+
+										<label for="date_naissance">Date de naissance :</label>
+										<input type="date" id="date_naissance" class="form-control"
+											name="date_naissance" ng-model="date_naissance" ng-required="true">
+										<span class="error-message" ng-show="myForm.date_naissance.$invalid">Veuillez
+											saisir une
+											date de
+											naissance</span><br>
+
+									</div>
+									<div class="form-group wow fadeInDown" data-wow-duration="500ms"
+										data-wow-delay=".7s">
+
+										<label for="sexe">Sexe :</label>
+										<select id="sexe" class="form-control" name="sexe" ng-model="sexe"
+											ng-required="true">
+											<option value="" selected>-- Selectionnez un sexe --</option>
+											<option value="Homme" selected>Homme</option>
+											<option value="Femme" selected>Femme</option>
+										</select>
+										<span class="error-message" ng-show="myForm.sexe.$invalid">Veuillez
+											saisir un sexe.</span><br>
+
+									</div>
+
+								</div>
+
+								<div id="submit" class="wow fadeInDown" data-wow-duration="500ms" data-wow-delay="1.4s">
+									<button type="button"
+										ng-disabled="myForm.nom.$invalid || myForm.prenom.$invalid ||myForm.date_naissance.$invalid || (showOther && otherOption.$invalid)"
+										ng-click="submitForm()" id="contact-submit"
+										class="btn btn-default btn-send hvr-bounce-to-right">Suivant</button>
+								</div>
+
+							</div>
+							<div class="col-md-6">
+								<div>
+									<br>
+									<label>Particularités :</label><br>
+									<div ng-if="particularities.length > 0">
+										<div class="checkbox-container" ng-repeat="particularity in particularities">
+											<input input type="checkbox" ng-model="particularity.checked"
+												ng-change="updateResults()" id="{{particularity.name}}">
+											<label class="checkbox-label ">{{particularity.name}}</label>
+											<br>
+										</div>
+										<div ng-show="showOther" class="checkbox-container">
+											<label>Precisez - (Séparez les avec des ","):</label>
+											<input type="text" name="otherOption" ng-model="otherOption"
+												ng-change="updateOtherOption()">
+										</div>
+
+									</div><br>
+
+								</div>
+
+							</div>
+					</form>
+
+				</div>
+				</div>
+
+
+
+			</section>
+			<%- include('./partials/newFooter'); %>
+	
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function ($scope) {
+			$scope.particularities = JSON.parse(`<%- JSON.stringify(list_particularity) %>`).map(function (particularity) {
+				return { name: particularity.Name, checked: false };
+			});
+			$scope.particularities.push({ name: "Autre", checked: false });
+			$scope.showOther = false;
+			$scope.submitForm = function () {
+				if ($scope.myForm.$invalid) {
+					alert('Veuillez remplir tous les champs obligatoires');
+				} else {
+					alert('Formulaire soumis avec succès');
+					var selectedParticularities = $scope.particularities.filter(function (item) {
+						return item.checked;
+					}).map(function (item) {
+						return item.name;
+					});
+
+					// Create hidden input with selected particularities
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "selectedParticularities";
+					input.value = selectedParticularities.join(",");
+					document.myForm.appendChild(input);
+					// Submit form
+					document.getElementById("myForm").submit();
+				}
+			};
+
+			$scope.updateResults = function () {
+				const selectedParticularities = $scope.particularities
+					.filter(criteria => criteria.checked)
+					.map(criteria => criteria.name);
+				$scope.showOther = $scope.particularities.some(criteria => criteria.name === "Autre" && criteria.checked);
+
+
+			};
+
+		});
+
+	</script>
+
+</html>

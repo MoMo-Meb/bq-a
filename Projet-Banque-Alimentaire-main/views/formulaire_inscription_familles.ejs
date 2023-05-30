@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<%- include('./partials/head'); %>
+
+  <body ng-controller="myCtrl">
+    <%- include('./partials/header'); %>
+
+      <div id="form-container">
+        <form name="myForm" action="/inscription_famille" method="POST">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" ng-model="formData.firstName" ng-pattern="/^[a-zA-Z\s]*$/"
+            required>
+          <div ng-show="myForm.firstName.$dirty && myForm.firstName.$invalid">
+            <small class="error-message" ng-show="myForm.firstName.$error.required">First Name is required.</small>
+            <small class="error-message" ng-show="myForm.firstName.$error.pattern">First Name must contain only letters
+              and spaces.</small>
+          </div>
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" ng-model="formData.lastName" ng-pattern="/^[a-zA-Z\s]*$/"
+            required>
+          <div ng-show="myForm.lastName.$dirty && myForm.lastName.$invalid">
+            <small class="error-message" ng-show="myForm.lastName.$error.required">Last Name is required.</small>
+            <small class="error-message" ng-show="myForm.lastName.$error.pattern">Last Name must contain only letters
+              and spaces.</small>
+          </div>
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" ng-model="formData.email" required>
+          <div ng-show="myForm.email.$dirty && myForm.email.$invalid">
+            <small class="error-message" ng-show="myForm.email.$error.required">Email is required.</small>
+            <small class="error-message" ng-show="myForm.email.$error.email">Invalid email address.</small>
+          </div>
+          <label for="phone">Phone Number</label>
+          <input type="tel" id="phone" name="phone" ng-model="formData.phone"
+            ng-pattern="/^[0-9]{3}-[0-9]{3}-[0-9]{4}$/" ng-change="formData.phone = formatPhoneNumber(formData.phone)"
+            required ng-model-options="{updateOn: 'default blur', debounce: {'default': 500, 'blur': 0}}"
+            maxlength="12">
+          <div ng-show="myForm.phone.$dirty && myForm.phone.$invalid">
+            <small class="error-message" ng-show="myForm.phone.$error.required">Phone Number is required.</small>
+            <small class="error-message" ng-show="myForm.phone.$error.pattern">Invalid phone number format. Use
+              XXX-XXX-XXXX.</small>
+          </div>
+          <div
+            ng-show="myForm.phone.$valid && myForm.lastName.$valid && myForm.firstName.$valid && myForm.email.$valid">
+            <button type="button" ng-click="addFamilyMember()">Add family member</button>
+            <div ng-repeat="member in formData.familyMembers">
+              <label for="firstName{{$index}}">First Name</label>
+              <input type="text" id="firstName{{$index}}" name="firstName{{$index}}" ng-model="member.firstName"
+                ng-pattern="/^[a-zA-Z\s]*$/" required>
+              <div ng-show="myForm['firstName' + $index].$dirty && myForm['firstName' + $index].$invalid">
+                <small class="error-message" ng-show="myForm['firstName' + $index].$error.required">First Name is
+                  required.</small>
+                <small class="error-message" ng-show="myForm['firstName' + $index].$error.pattern">First Name must
+                  contain only letters and spaces.</small>
+              </div>
+              <label for="lastName{{$index}}">Last Name</label>
+              <input type="text" id="lastName{{$index}}" name="lastName{{$index}}" ng-model="member.lastName"
+                ng-pattern="/^[a-zA-Z\s]*$/" required>
+              <div ng-show="myForm['lastName' + $index].$dirty && myForm['lastName' + $index].$invalid">
+                <small class="error-message" ng-show="myForm['lastName' + $index].$error.required">Last Name is
+                  required.</small>
+                <small class="error-message" ng-show="myForm['lastName' + $index].$error.pattern">Last Name must contain
+                  only letters and spaces.</small>
+              </div>
+              <button type="button" ng-click="removeFamilyMember($index)">Delete</button>
+            </div>
+            <br>
+
+            <% if (list_location !==undefined && list_location.length> 0){%>
+
+
+              <label for="officeLocation">Office Location</label>
+              <select id="officeLocation" name="officeLocation" ng-model="formData.officeLocation" required>
+
+                <% list_location.forEach(function(office) { %>
+                  <option value="<%= office.Name %>">
+                    <%= office.Name %>
+                  </option>
+                  <% }); %>
+              </select>
+
+
+              <% }; %>
+                <% if (list_particularite !==undefined && list_particularite.length> 0){%>
+
+                  <div><br>
+                    <label>Particularités</label>
+                    <% list_particularite.forEach(function(particularity) { %>
+                      <label>
+                        <input type="checkbox" id="<%= particularity.Name %>" name="<%= particularity.Name %>"
+                          value="<%= particularity.Name %>">
+                        <%= particularity.Description %>
+                      </label>
+                      <% }); %>
+
+                  </div>
+
+                  <%}%>
+
+          </div>
+
+          <input type="submit" ng-click="submitForm()"
+            ng-disabled="myForm.phone.$invalid || myForm.lastName.$invalid || myForm.firstName.$invalid || myForm.email.$invalid">
+      </div>
+
+      </form>
+      </div>
+      <script>
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope) {
+          $scope.formData = {
+            familyMembers: []
+          };
+          $scope.addFamilyMember = function () {
+            $scope.formData.familyMembers.push({});
+          };
+          $scope.submitForm = function () {
+            var familyMembersString = $scope.formData.familyMembers.map(function (member) {
+              return member.firstName + ' ' + member.lastName;
+            }).join(', ');
+
+            var formElement = document.querySelector("form[name='myForm']");
+            var input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "familyMembers";
+            input.value = familyMembersString;
+            formElement.appendChild(input);
+            formElement.submit();
+          };
+
+          $scope.removeFamilyMember = function (index) {
+            $scope.formData.familyMembers.splice(index, 1);
+          };
+          $scope.formatPhoneNumber = function (phoneNumber) {
+            var formattedNumber = phoneNumber.replace(/[^0-9]/g, ''); // remove all non-numeric characters
+            if (formattedNumber.length > 3) {
+              formattedNumber = formattedNumber.slice(0, 3) + '-' + formattedNumber.slice(3);
+            }
+            if (formattedNumber.length > 7) {
+              formattedNumber = formattedNumber.slice(0, 7) + '-' + formattedNumber.slice(7);
+            }
+            return formattedNumber;
+          };
+        });
+
+
+      </script>
+  <%- include('./partials/footer'); %>
+  </body>
+
+</html>

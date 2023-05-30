@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<%- include('./partials/newhead'); %>
+
+<body>
+    <%- include('./partials/newHeader'); %>
+    <section class="global-page-header">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="block">
+                <h2>Détails familiales : </h2>
+                <ol class="breadcrumb list-inline text-center">
+                  <li class="list-inline-item">
+                    <a href="/">
+                      <i class="ion-ios-home"></i>
+                      Accueil &nbsp; &nbsp;/
+                    </a>
+                  </li>
+                  <li class="active list-inline-item">Détails familiales</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <div class="main-page-content">
+        <div class="container">
+        <h2>Membre principal</h2>
+        <table id="originalTable" class="table table-striped table-hover mx-auto professional-style">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Sexe</th>
+                    <th>DateNaissance</th>
+                    <th>Particularities</th>
+                    <th>Modifier</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i=0; i < 1; i++) { %>
+                    <tr>
+                        <td>
+                            <%= personnes[i].Id %>
+                        </td>
+                        <td class="editable" data-column-name="LastName">
+                            <%= personnes[i].LastName %>
+                        </td>
+                        <td class="editable" data-column-name="FirstName">
+                            <%= personnes[i].FirstName %>
+                        </td>
+                        <td class="editable" data-column-name="Sexe">
+                            <%= personnes[i].Sexe %>
+                        </td>
+                        <td class="editable" data-column-name="DateNaissance">
+                            <%= personnes[i].DateNaissance.toISOString().slice(0, 10) %>
+                        </td>
+                        <td class="editable" data-column-name="Particularities">
+                            <%= personnes[i].Particularities %>
+                        </td>
+                        <td>
+                            <button class="edit-button" onclick="editTableRow(this.parentNode.parentNode)">Edit</button>
+                            <button class="save-button" onclick="saveTableRow(this.parentNode.parentNode)">Save</button>
+                            <button class="cancel-button"
+                                onclick="cancelTableRow(this.parentNode.parentNode)">Cancel</button>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+
+        <h2>Membre de la famille</h2>
+        <table id="originalTable" class="table table-striped table-hover mx-auto professional-style">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Sexe</th>
+                    <th>DateNaissance</th>
+                    <th>Particularities</th>
+                    <th>Modifier</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let i=1; i < personnes.length; i++) { %>
+                    <tr>
+                        <td>
+                            <%= personnes[i].Id %>
+                        </td>
+                        <td class="editable" data-column-name="LastName">
+                            <%= personnes[i].LastName %>
+                        </td>
+                        <td class="editable" data-column-name="FirstName">
+                            <%= personnes[i].FirstName %>
+                        </td>
+                        <td class="editable" data-column-name="Sexe">
+                            <%= personnes[i].Sexe %>
+                        </td>
+                        <td class="editable" data-column-name="DateNaissance">
+                            <%= personnes[i].DateNaissance.toISOString().slice(0, 10) %>
+                        </td>
+                        <td class="editable" data-column-name="Particularities">
+                            <%= personnes[i].Particularities %>
+                        </td>
+                        <td>
+                            <button class="edit-button"
+                                onclick="editTableRow(this.parentNode.parentNode)">Edit</button>
+                            <button class="save-button"
+                                onclick="saveTableRow(this.parentNode.parentNode)">Save</button>
+                            <button class="cancel-button"
+                                onclick="cancelTableRow(this.parentNode.parentNode)">Cancel</button>
+                        </td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+</div>
+    <%- include('./partials/contactme'); %>
+    <%- include('./partials/newFooter'); %>
+</body>
+
+<script src="/scripts/details_familles_id.script.js"></script>
+</html>

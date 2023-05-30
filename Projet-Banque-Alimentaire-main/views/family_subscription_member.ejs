@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+
+<%- include('./partials/newhead'); %>
+
+	<body ng-controller="myCtrl">
+		<%- include('./partials/newHeader'); %>
+			<section class="global-page-header">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12">
+							<div class="block">
+								<h2>Abonnement</h2>
+								<ol class="breadcrumb list-inline text-center">
+									<li class="list-inline-item">
+										<a href="index.html">
+											<i class="ion-ios-home"></i>
+											Accueil &nbsp; &nbsp;/
+										</a>
+									</li>
+									<li class="active list-inline-item">Abonnement</li>
+								</ol>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<section id="contact-section">
+				<div class="container">
+					<h1>Page des membres de la famille</h1>
+					<div class="row">
+						<div class="col-md-6 mb-5 mb-md-0">
+							<div class="block">
+								<div class="form-container">
+									<div class="main-member-box">
+										<h2>Membre Principale : </h2>
+										<p>{{MainMember.firstName}} {{MainMember.lastName}}</p>
+										<p>Date de Naissance : {{MainMember.birthday}}</p>
+										<p>Particularité : {{MainMember.particularities}}</p>
+									</div>
+									<form name="myForm" id="myForm" action="/abonnement_termine" method="POST"
+										novalidate>
+										<button type="button" ng-click="addMember()">Ajouter un membre</button><br><br>
+
+
+
+										<div id="submit" class="wow fadeInDown" data-wow-duration="500ms"
+											data-wow-delay="1.4s">
+											<button type="button" ng-disabled="!CheckForData()" ng-click="submitForm()"
+												id="contact-submit"
+												class="btn btn-default btn-send hvr-bounce-to-right">Soumettre</button>
+										</div>
+									</form>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-md-6">
+
+							<label>Membres :</label><br>
+							<div ng-repeat="member in members">
+
+								<div class="row">
+									<h2>Membre {{ $index + 1 }}</h2>
+								</div>
+								<div class="row">
+									<div class="col-md-6 mb-5 mb-md-0">
+										<label for="lastName{{$index}}">Nom :</label>
+										<input type="text" id="lastName{{$index}}" name="lastName{{$index}}"
+											ng-model="member.lastName" ng-required="true">
+										<span class="error-message"
+											ng-show="myForm['lastName'+$index].$invalid && myForm['lastName'+$index].$touched">Veuillez
+											saisir
+											un
+											nom</span><br>
+
+										<label for="firstName{{$index}}">Prénom :</label>
+										<input type="text" id="firstName{{$index}}" name="firstName{{$index}}"
+											ng-model="member.firstName" ng-required="true">
+										<span class="error-message"
+											ng-show="myForm['firstName'+$index].$invalid && myForm['firstName'+$index].$touched">Veuillez
+											saisir
+											un prénom</span><br>
+
+										<label for="sexe{{$index}}">Sexe :</label>
+										<select type="text" id="sexe{{$index}}" class="form-control"
+											name="sexe{{$index}}" ng-model="member.sexe" ng-required="true">
+											<option value="" selected>-- Selectionnez un sexe --</option>
+											<option value="Homme" selected>Homme</option>
+											<option value="Femme" selected>Femelle</option>
+										</select>
+										<span class="error-message" ng-show="myForm.sexe.$invalid">Veuillez
+											saisir un sexe.</span><br>
+
+
+										<label for="birthdate{{$index}}">Date de naissance :</label>
+										<input type="date" id="birthdate{{$index}}" name="birthdate{{$index}}"
+											ng-model="member.birthdate" ng-required="true">
+										<span class="error-message"
+											ng-show="myForm['birthdate'+$index].$invalid && myForm['birthdate'+$index].$touched">Veuillez
+											saisir
+											une date de naissance</span><br>
+
+										<br>
+										<br>
+										<br>
+									</div>
+									<div class="col-md-6">
+										<label>Particularités :</label><br>
+										<div class="checkbox-container" ng-repeat="particularity in particularities">
+											<label class="checkbox-label "
+												for="{{particularity.name}}{{$index}}">{{particularity.name}}</label>
+											<input type="checkbox" id="{{particularity.name}}{{$index}}"
+												name="{{particularity.name}}{{$index}}" ng-model="isChecked"
+												ng-change="isChecked ? addParticularity(member, particularity.name) : removeParticularity(member, particularity.name)">
+										</div>
+
+
+										<div ng-show="member.showother">
+											<label>Precisez - (Séparez les avec des ","):</label>
+											<input type="text" ng-model="member.options">
+										</div>
+									</div>
+
+									<button type="button" ng-click="removeMember($index)">Supprimer ce
+										membre</button>
+
+								</div>
+								<hr>
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</section>
+			<%- include('./partials/newFooter'); %>	
+				 </body>
+	</body>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+	<script>
+		var app = angular.module('myApp', []);
+		app.controller('myCtrl', function ($scope) {
+			$scope.MainMember = {
+				lastName: '<%= LastName %>',
+				firstName: '<%= FirstName %>',
+				birthday: '<%= Birthday %>',
+				sexe : '<%= Sexe %>',
+				particularities: JSON.parse('<%- JSON.stringify(Particularities) %>')
+			}
+			console.log($scope.MainMember);
+			$scope.particularities = JSON.parse(`<%- JSON.stringify(particularities) %>`).map(function (particularity) {
+				return { name: particularity.Name, checked: false };
+			});
+			$scope.particularities.push({ name: "Autre", checked: false });
+			$scope.officeLocation = '<%= officeLocation %>';
+			$scope.address = '<%= address %>';
+			$scope.telephone = '<%= telephone %>';
+			$scope.email = '<%= email %>';
+			$scope.members = [];
+
+			$scope.CheckForData = function () {
+				if ($scope.members.length > 0) {
+					angular.forEach($scope.members, function (Member) {
+						if (Member.firstName.trim() == "" || Member.lastName.trim() == "" || Member.birthdate.trim() == "" || (member.showother && member.options.trim() == "")) {
+							return false;
+						}
+					});
+				}
+				return true;
+			}
+
+			$scope.addMember = function () {
+				$scope.members.push({
+					lastName: '',
+					firstName: '',
+					birthdate: '',
+					particularities: [],
+					showother: false,
+					options: '',
+				});
+
+
+			};
+
+			$scope.removeMember = function (index) {
+				$scope.members.splice(index, 1);
+			};
+
+			$scope.addParticularity = function (member, particularity) {
+				if (member.particularities.indexOf(particularity) === -1) {
+					member.particularities.push(particularity);
+				}
+				if (particularity == "Autre") {
+					member.showother = true;
+				}
+
+			};
+
+			$scope.removeParticularity = function (member, particularity) {
+				var index = member.particularities.indexOf(particularity);
+				if (index !== -1) {
+					member.particularities.splice(index, 1);
+				}
+				if (particularity == "Autre") {
+					member.showother = false;
+				}
+			};
+			$scope.submitForm = function () {
+				if ($scope.myForm.$invalid) {
+					alert('Veuillez remplir tous les champs obligatoires');
+
+				} else {
+					var memberList = [];
+					memberList.push($scope.MainMember);
+					angular.forEach($scope.members, function (member) {
+						var memberSpecificparticularities = [];
+						angular.forEach($scope.particularities, function (particularity) {
+							if (member.particularities.indexOf(particularity.name) !== -1) {
+								memberSpecificparticularities.push(particularity.name);
+							}
+						});
+						var index = memberSpecificparticularities.indexOf("Autre");
+						if (index != -1) {
+							memberSpecificparticularities.splice(index, 1);
+							console.log(member.options);
+							list = member.options.split(',');
+							list.forEach(element => {
+								memberSpecificparticularities.push(element);
+							});
+						}
+						var Member = {
+							FirstName: member.firstName,
+							LastName: member.lastName,
+							Birthday: member.birthdate,
+							Sexe: member.sexe,
+							Particularities: memberSpecificparticularities,
+						};
+						console.log(Member);
+						memberList.push(Member);
+					});
+					var memberListString = JSON.stringify(memberList);
+					var input = document.createElement("input");
+					input.type = "hidden";
+					input.name = "memberList";
+					input.value = memberListString;
+					document.getElementById('myForm').appendChild(input);
+					console.log(input.value)
+
+
+					var officeLocationInput = document.createElement('input');
+					officeLocationInput.type = 'hidden';
+					officeLocationInput.name = 'officeLocation';
+					officeLocationInput.value = '<%= officeLocation %>';
+					document.getElementById('myForm').appendChild(officeLocationInput);
+
+					var addressInput = document.createElement('input');
+					addressInput.type = 'hidden';
+					addressInput.name = 'address';
+					addressInput.value = '<%= address %>';
+					document.getElementById('myForm').appendChild(addressInput);
+
+					var telephoneInput = document.createElement('input');
+					telephoneInput.type = 'hidden';
+					telephoneInput.name = 'telephone';
+					telephoneInput.value = '<%= telephone %>';
+					document.getElementById('myForm').appendChild(telephoneInput);
+
+					var emailInput = document.createElement('input');
+					emailInput.type = 'hidden';
+					emailInput.name = 'email';
+					emailInput.value = '<%= email %>';
+					document.getElementById('myForm').appendChild(emailInput);
+					document.getElementById('myForm').submit();
+				}
+			};
+		});
+	</script>
+
+</html>

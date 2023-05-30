@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head>
+    <title>Search Page</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+
+<body ng-controller="searchController">
+
+    <h2>Search Filters</h2>
+    <div ng-repeat="criteria in criterias">
+        <label>
+            <input type="checkbox" ng-model="criteria.checked" ng-change="updateResults()">
+            {{ criteria.name}}
+        </label>
+    </div>
+
+    <h2>Search Results</h2>
+    <div ng-repeat="item in filteredResults">
+        {{ item.name }}
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+        app.controller('searchController', function ($scope, $http) {
+            
+            $scope.criterias = JSON.parse(`<%- JSON.stringify(particularities) %>`).map(function (particularity) {
+                console.log(particularity)
+                return { name: particularity, checked: false };
+            });
+    
+            $scope.filteredResults = [];
+    
+            $scope.updateResults = function () {
+                const selectedParticularities = $scope.criterias
+                    .filter(criteria => criteria.checked)
+                    .map(criteria => criteria.name);
+                $http.post('/api/filter-members', { particularities: selectedParticularities }).then(function (response) {
+                    $scope.filteredResults = response.data;
+                });
+            };
+        });
+    </script>
+    
+</body>
+
+</html>

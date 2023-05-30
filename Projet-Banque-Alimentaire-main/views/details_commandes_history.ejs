@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/newhead'); %>
+
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Historique de Panier</title>
+        <style>
+            :root {
+
+                --snippet-background: #3eca5a;
+                --snippet-background-darkish: #3e8d42;
+                --snippet-background-shadow: #2b5c33;
+                --page-background: #fff;
+                --error-text: #f04343;
+            }
+
+            /* Table styles */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            th,
+            td {
+                text-align: center;
+                padding: 8px;
+            }
+
+            th {
+                text-align: center;
+                background-color: #f2f2f2;
+            }
+
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+
+            /* Date and time container styles */
+            .date-time-container {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 10px;
+            }
+
+            .date-time-inner-container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .date-time-container div {
+                display: flex;
+                align-items: center;
+                margin-right: 50px;
+            }
+
+            /* Clear button container styles */
+            .clear-all-container {
+                position: absolute;
+                right: 0;
+                margin-right: 50px;
+            }
+
+            /* Spacers for better spacing */
+            .spacer {
+                margin-left: 10px;
+                margin-right: 10px;
+            }
+
+            .spacer-date-time {
+                margin-left: 5px;
+                margin-right: 5px;
+            }
+
+            /* Search and clear button container styles */
+            .clear-search-go-container {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 10px;
+                margin-bottom: 10px;
+                margin-right: 50px;
+            }
+
+            /* Button styles */
+            button {
+                background-color: var(--snippet-background);
+                color: black;
+                font-size: 15px;
+                font-weight: bold;
+                border-radius: 10px;
+                padding: 5px 10px;
+                border: none;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <%- include('./partials/newHeader'); %>
+            <section class="global-page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="block">
+                                <h2>Liste Commandes : </h2>
+                                <ol class="breadcrumb list-inline text-center">
+                                    <li class="list-inline-item">
+                                        <a href="/">
+                                            <i class="ion-ios-home"></i>
+                                            Accueil &nbsp; &nbsp;/
+                                        </a>
+                                    </li>
+                                    <li class="active list-inline-item">Liste Commandes</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="date-time-container">
+                <div class="date-time-inner-container">
+                    <div>
+                        Start Date:<span class="spacer-date-time"></span>
+                        <input class="form-control" type="date" id="startDate">
+                        <span class="spacer"></span>
+                        Start Time:<span class="spacer-date-time"></span>
+                        <input class="form-control" type="time" id="startTime">
+                        <span class="spacer"></span>
+                        <button onclick="clearStart()">Clear</button>
+                    </div>
+                    <div>
+                        End Date: <span class="spacer-date-time"></span>
+                        <input class="form-control" type="date" id="endDate">
+                        <span class="spacer"></span>
+                        End Time: <span class="spacer-date-time"></span>
+                        <input class="form-control" type="time" id="endTime">
+                        <span class="spacer"></span>
+                        <button onclick="clearEnd()">Clear</button>
+                    </div>
+                </div>
+                <div class="clear-all-container">
+                    <button onclick="clearAll()">Clear All</button>
+                </div>
+            </div>
+            <div class="clear-search-go-container">
+                <button onclick="clearSearch()">Clear Search</button>
+                <span class="spacer"></span>
+                <button onclick="filterCommandes()">Search</button>
+            </div>
+            <table>
+                <tr>
+                    <th class="head-filter" data-sort="Id">ID</th>
+                    <th class="head-filter" data-sort="MemberName">Member Name</th>
+                    <th class="head-filter" data-sort="ServiceName">Service Name</th>
+                    <th class="head-filter" data-sort="OfficeName">Office Name</th>
+                    <th class="head-filter" data-sort="ServicePrice">Service Price</th>
+                    <th class="head-filter" data-sort="Etat">Etat</th>
+                    <th class="head-filter" data-sort="Date">Date</th>
+                    <th class="head-filter" data-sort="Time">Time</th>
+                    <th>Confirmed by employee</th>
+                </tr>
+                <tbody id="commandesTable">
+                    <% commandes.sort((a, b)=> a.Id - b.Id); %>
+                        <% for (let i=0; i < commandes.length; i++) { %>
+                            <% const currentService=services.find(service=> service.Id === commandes[i].ServiceId); %>
+                                <% const currentAbonnement=abonnements.find(abonnement=> abonnement.Id ===
+                                    commandes[i].AbonnementId); %>
+                                    <% const currentOffice=offices.find(office=> office.Id ===
+                                        commandes[i].CurrentOffice);
+                                        %>
+                                        <% const currentEmployee=users.find(user=> user.Id === commandes[i].EmployeeId);
+                                            %>
+                                            <% const Etat=commandes[i].Etat; %>
+                                                <% const familyMembers=currentAbonnement.FamilyMembers !=undefined?
+                                                    currentAbonnement.FamilyMembers.split(',').map(abonnementid=>
+                                                    parseInt(abonnementid.trim())) : ""; %>
+                                                    <% const
+                                                        lastFamilyMember=parseInt(currentAbonnement.FamilyMembers.trim().split(',').pop().trim());
+                                                        %>
+                                                        <% if (!isNaN(lastFamilyMember) && lastFamilyMember
+                                                            !==familyMembers[0]) { %>
+                                                            <% familyMembers.push(lastFamilyMember); %>
+                                                                <% } %>
+                                                                    <% const firstMember=personnes.find(person=>
+                                                                        person.Id
+                                                                        === familyMembers[0]); %>
+                                                                        <tr class="sort-row"
+                                                                            id="commande-<%= commandes[i].Id %>">
+                                                                            <td>
+                                                                                <%= commandes[i].Id %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= firstMember ? firstMember.FirstName
+                                                                                    + ' ' + firstMember.LastName : 'N/A'
+                                                                                    %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= currentService ? currentService.Name
+                                                                                    : 'N/A' %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= currentOffice ? currentOffice.Name
+                                                                                    : 'N/A' %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= currentService ?
+                                                                                    currentService.Price : 'N/A' %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= Etat ? Etat : 'N/A' %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= commandes[i].Date.toISOString().slice(0,
+                                                                                    10) %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= commandes[i].Time %>
+                                                                            </td>
+                                                                            <td>
+                                                                                <%= currentEmployee ?
+                                                                                    currentEmployee.FirstName + ' ' +
+                                                                                    currentEmployee.LastName : 'N/A' %>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <% } %>
+                </tbody>
+            </table>
+            <div id="data-container" style="display:none;" data-commandes='<%- JSON.stringify(commandes) %>'
+                data-services='<%- JSON.stringify(services) %>' data-abonnements='<%- JSON.stringify(abonnements) %>'
+                data-offices='<%- JSON.stringify(offices) %>' data-users='<%- JSON.stringify(users) %>'
+                data-personnes='<%- JSON.stringify(personnes) %>'>
+            </div>
+            <script src="/scripts/details_commandes_history.script.js"></script>
+            <%- include('./partials/contactme'); %>
+                <%- include('./partials/newFooter'); %>
+    </body>
+
+</html>

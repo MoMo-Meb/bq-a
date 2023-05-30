@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+
+<html class="no-js">
+
+
+<%- include('./partials/newhead'); %>
+
+<body>
+
+  <!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+
+  <%- include('./partials/newHeader'); %>
+
+        <!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+        <section class="global-page-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="block">
+                            <h2>Service</h2>
+                            <ol class="breadcrumb list-inline text-center">
+                                <li class="list-inline-item">
+                                    <a href="index.html">
+                                        <i class="ion-ios-home"></i>
+                                        Accueil  &nbsp; &nbsp;/
+                                    </a>
+                                </li>
+                                <li class="active list-inline-item">Service</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+<!-- 
+================================================== 
+    Service Page Section  Start
+================================================== -->
+<section id="service-page" class="pages service-page">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-6">
+        <h2 class="subtitle wow fadeInUp animated" data-wow-delay=".3s" data-wow-duration="500ms">What We Love
+          To Do</h2>
+        <p class="subtitle-des wow fadeInUp animated" data-wow-delay=".5s" data-wow-duration="500ms">Lorem
+          ipsum dolor sit amet, consectetur adipisicing elit. Perspiciatis porro recusandae non quibusdam
+          iure adipisci.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 order-2 order-lg-1">
+        <div class="block">
+          <div class="row service-parts">
+            <div class="col-md-6">
+              <div class="block wow fadeInUp animated" data-wow-duration="400ms" data-wow-delay="600ms">
+                <i class="ion-ios-americanfootball-outline"></i>
+                <h4>BRANDING</h4>
+                <p>Veritatis eligendi, dignissimos. Porta fermentum mus aute pulvinar earum minus
+                  platea massa feugiat rutrum urna facilisi ipsameum.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="block wow fadeInUp animated" data-wow-duration="400ms" data-wow-delay="800ms">
+                <i class="ion-ios-pint-outline"></i>
+                <h4>DESIGN</h4>
+                <p>Veritatis eligendi, dignissimos. Porta fermentum mus aute pulvinar earum minus
+                  platea massa feugiat rutrum urna facilisi ipsameum.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="block wow fadeInUp animated" data-wow-duration="400ms" data-wow-delay="1s">
+                <i class="ion-ios-paper-outline"></i>
+                <h4>DEVELOPMENT</h4>
+                <p>Veritatis eligendi, dignissimos. Porta fermentum mus aute pulvinar earum minus
+                  platea massa feugiat rutrum urna facilisi ipsameum.</p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="block wow fadeInUp animated" data-wow-duration="400ms" data-wow-delay="1.1s">
+                <i class="ion-ios-paper-outline"></i>
+                <h4>THEMEING</h4>
+                <p>Veritatis eligendi, dignissimos. Porta fermentum mus aute pulvinar earum minus
+                  platea massa feugiat rutrum urna facilisi ipsameum.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 order-1 order-lg-2">
+        <div class="block">
+          <img class="img-fluid" src="images/team.jpg" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- 
+================================================== 
+    Works Section Start
+================================================== -->
+<% if(services != undefined){ %>
+  <section id="works" class="works">
+    <div class="container">
+      <div class="section-heading">
+        <h1 class="title wow fadeInDown" data-wow-delay=".3s">Nos Services : </h1>
+        <p class="wow fadeInDown" data-wow-delay=".5s">
+          Aliquam lobortis. Maecenas vestibulum mollis diam. Pellentesque auctor neque nec urna. Nulla sit amet est.
+          Aenean posuere <br> tortor sed cursus feugiat, nunc augue blandit nunc, eu sollicitudin urna dolor sagittis
+          lacus.
+        </p>
+      </div>
+      <div class="row">
+
+
+
+
+
+
+
+        <% for (let i=0; i < services.length; i++) { %>
+          <%   if(services[i].NumberOfPersons != -1){%>
+            
+        <div class="col-md-4 col-sm-6">
+          <figure class="wow fadeInLeft animated portfolio-item" data-wow-duration="500ms" data-wow-delay="0ms">
+            <div class="img-wrapper">
+              <img src="images/portfolio/item-1.jpg" class="img-fluid" alt="this is a title">
+              <div class="overlay">
+                <div class="buttons">
+                  
+                <p> <%= services[i].Description%></p>
+                </div>
+              </div>
+            </div>
+            <figcaption>
+              <h4>
+                <a href="#">
+                  <%= services[i].Name %>
+                </a>
+              </h4>
+              <p>
+                <%= services[i].NumberOfPersons %> portions pour 
+                <%= services[i].Price %>CAD$
+              </p>
+            </figcaption>
+          </figure>
+        </div>
+
+        <%  }}%>
+
+
+      </div>
+    </div>
+  </section> <!-- #works -->
+  
+  <% }%>
+
+    <!--
+            ==================================================
+            Call To Action Section Start
+            ================================================== -->
+
+            <%- include('./partials/contactme'); %>
+
+    <!--
+            ==================================================
+            Footer Section Start
+            ================================================== -->
+
+
+            <%- include('./partials/newFooter'); %>
+
+            <!-- /#footer -->
+
+ 	</body>
+</html>

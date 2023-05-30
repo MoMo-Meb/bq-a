@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/newhead.ejs'); %>
+
+    <style>
+        .container-for-check {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .checkcross {
+            max-width: 35%;
+            max-height: 35%;
+            width: 400px;
+            height: 400px;
+        }
+    </style>
+
+    <body>
+        <section class="global-page-header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="block">
+                            <h2>CONFIRMATION : </h2>
+                            <ol class="breadcrumb list-inline text-center">
+                                <li class="list-inline-item">
+                                    <a href="/">
+                                        <i class="ion-ios-home"></i>
+                                        Accueil &nbsp; &nbsp;/
+                                    </a>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <%- include('./partials/newHeader.ejs'); %>
+
+            <div class="container-for-check" style="text-align: center;">
+                <p>
+                    <%=message%>
+                </p>
+                <% if(success){%>
+                    <img class="checkcross" src="/images/Check.png" alt="Confirmation Image">
+                  <%}else{%>
+                    <img src="/images/Cross.png" alt="Error Image">
+                  <%}%>
+                            <p>Vous serez bientôt redirigé vers la page d'accueil...</p>
+            </div>
+
+            <%- include('./partials/newFooter.ejs'); %>
+    </body>
+
+    <script>
+        setTimeout(function () {
+            window.location.href = "/";
+        }, 3000); // 5 seconds
+    </script>
+
+</html>

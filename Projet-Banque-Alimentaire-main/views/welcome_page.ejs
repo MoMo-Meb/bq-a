@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+
+
+<html class="no-js">
+
+
+<%- include('./partials/newhead'); %>
+
+<body>
+
+  <!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+
+  <%- include('./partials/newHeader'); %>
+
+    <!--
+==================================================
+Slider Section Start
+================================================== -->
+    <section id="hero-area">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <div class="block wow fadeInUp" data-wow-delay=".3s">
+
+              <!-- Slider -->
+              <section class="cd-intro">
+                <h1 class="wow fadeInUp animated cd-headline slide" data-wow-delay=".4s">
+                  <span>Adrianna Espace Collectif</span><br>
+                  <span class="cd-words-wrapper">
+                    <b class="is-visible">ENTRAIDE</b>
+                    <b>UNION</b>
+                    <b>BESOIN</b>
+                  </span>
+                </h1>
+              </section> <!-- cd-intro -->
+              <!-- /.slider -->
+              <h2 class="wow fadeInUp animated" data-wow-delay=".6s">
+                Notre entreprise de banque alimentaire
+                fournit une aide essentielle en nourriture
+                pour les familles nécessiteuses.
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--/#main-slider-->
+
+    <!--
+==================================================
+About Section Start
+================================================== -->
+    <section id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-sm-6">
+            <div class="block wow fadeInLeft" data-wow-delay=".3s" data-wow-duration="500ms">
+              <h2>
+                À PROPOS DE NOUS
+              </h2>
+              <p>
+                Nous sommes une organisation à but non lucratif dédiée à fournir une assistance alimentaire à ceux qui en ont besoin.
+                Notre objectif est d'aider tout le monde dans notre communauté, quelles que soient leurs circonstances.
+              </p>
+              <p>
+                Notre mission est de fournir une assistance alimentaire à ceux qui en ont besoin, tout en favorisant l'autosuffisance et
+                le soutien communautaire. Nous croyons que tout le monde mérite l'accès à une alimentation saine et nous sommes
+                engagés à en faire une réalité pour notre communauté.
+              </p>
+              <h2>Comment vous pouvez aider</h2>
+              <p>Nous comptons sur le soutien de notre communauté pour nous aider à atteindre notre mission. Il existe de nombreuses
+                façons de vous impliquer et de faire une différence :</p>
+              <ul>
+                <li>Bénévolat : Nous sommes toujours à la recherche de bénévoles pour nous aider à trier et à distribuer de la nourriture,
+                  ainsi que pour aider lors d'événements.</li>
+                <li>Donner : Vos dons nous aident à fournir une assistance alimentaire à ceux qui en ont besoin. Nous acceptons les dons
+                  en argent et les denrées alimentaires non périssables.</li>
+                <li>Faire connaître : Aidez-nous à sensibiliser à l'insécurité alimentaire dans notre communauté en partageant notre mission
+                  avec vos amis et votre famille.</li>
+              </ul>
+              <p>Ensemble, nous pouvons faire une différence dans la vie de ceux qui en ont besoin. Contactez-nous dès aujourd'hui pour
+                en savoir plus sur la façon dont vous pouvez aider.</p>
+            </div>
+
+          </div>
+          <div class="col-md-6 col-sm-6">
+            <div class="block wow fadeInRight" data-wow-delay=".3s" data-wow-duration="500ms">
+              <img src="images/about/about.jpg" alt="">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> <!-- /#about -->
+
+
+    <!--
+==================================================
+Portfolio Section Start
+================================================== -->
+
+<% if(services != undefined){ %>
+    <section id="works" class="works">
+      <div class="container">
+        <div class="section-heading">
+          <h1 class="title wow fadeInDown" data-wow-delay=".3s">Nos Services : </h1>
+          <p class="wow fadeInDown" data-wow-delay=".5s">
+            Pour un abonnement payé a la caisse d'uniquement 25$ par année, vous recevez la possibilité de pouvoir commander <br>
+            et récupérer des paniers de nourritures adaptés aux besoins et au particularités de votre famille sous un prix très abordable!
+          </p>
+        </div>
+        <div class="row">
+          <% for (let i=0; i < services.length; i++) { %>
+            <%   if(services[i].NumberOfPersons != -1){%>
+              
+          <div class="col-md-4 col-sm-6">
+            <figure class="wow fadeInLeft animated portfolio-item" data-wow-duration="500ms" data-wow-delay="0ms">
+              <div class="img-wrapper">
+                <img src="images/portfolio/item-1.jpg" class="img-fluid" alt="this is a title">
+                <div class="overlay">
+                  <div class="buttons">
+                    
+                  <p> <%= services[i].Description%></p>
+                  </div>
+                </div>
+              </div>
+              <figcaption>
+                <h4>
+                  <a href="/inscription_famille">
+                    <%= services[i].Name %>
+                  </a>
+                </h4>
+                <p>
+                  <%= services[i].NumberOfPersons %> portions pour 
+                  <%= services[i].Price %>CAD$
+                </p>
+              </figcaption>
+            </figure>
+          </div>
+          <%  }}%>
+        </div>
+      </div>
+    </section> <!-- #works -->
+    
+    <% }%>
+    <!--
+==================================================
+Portfolio Section Start
+================================================== -->
+    <section id="feature">
+      <div class="container">
+        <div class="section-heading">
+          <h1 class="title wow fadeInDown" data-wow-delay=".3s">Ce que nous offrons :</h1>
+        </div>
+        <div class="row">
+         
+         
+          <div class="col-sm-6 col-lg-4">
+            <div class="media wow fadeInDown animated" data-wow-duration="500ms" data-wow-delay="900ms">
+              <div class="media-left">
+                <div class="icon">
+                  <i class="ion-ios-lightbulb-outline"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Bien ressourcé</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, sint.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="media wow fadeInDown animated" data-wow-duration="500ms" data-wow-delay="1200ms">
+              <div class="media-left">
+                <div class="icon">
+                  <i class="ion-ios-americanfootball-outline"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Un environnement sécuritaire</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, sint.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-lg-4">
+            <div class="media wow fadeInDown animated" data-wow-duration="500ms" data-wow-delay="1500ms">
+              <div class="media-left">
+                <div class="icon">
+                  <i class="ion-ios-keypad-outline"></i>
+                </div>
+              </div>
+              <div class="media-body">
+                <h4 class="media-heading">Un support solide</h4>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, sint.</p>
+              </div>
+            </div>
+          </div>
+         
+        </div>
+      </div>
+    </section> <!-- /#feature -->
+    
+
+    <!--
+            ==================================================
+            Call To Action Section Start
+            ================================================== -->
+
+            <%- include('./partials/contactme'); %>
+
+    <!--
+            ==================================================
+            Footer Section Start
+            ================================================== -->
+
+
+            <%- include('./partials/newFooter'); %>
+
+            <!-- /#footer -->
+
+
+</body>
+
+</html>

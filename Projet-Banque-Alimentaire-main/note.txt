@@ -1,0 +1,18 @@
+1. Afficher les revenus sommaires et détaillé par succursale entre deux dates:
+revenus par panier, inscription, total location.
+par date.
+
+
+2. Afficher la liste des familles qui ne sont pas actifs entre deux dates:
+par date. par abonnement:
+
+3. option de renouvellement. ou ce que la personne qui n'ont pas payé leur abonnement.
+par date.
+
+4. inscription de compte:
+ajout du choix de type de compte.
+genere un mot de passe puissant et aleatoire pour l'employé
+l'envoyé par email
+
+theme:
+https://themefisher.com/products/timer

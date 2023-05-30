@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historique de Panier</title>
+    <style>
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            text-align: center;
+            padding: 8px;
+        }
+
+        th {
+            text-align: center;
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Date and time container styles */
+        .date-time-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+
+        .date-time-inner-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .date-time-container div {
+            display: flex;
+            align-items: center;
+            margin-right: 50px;
+        }
+
+        /* Clear button container styles */
+        .clear-all-container {
+            position: absolute;
+            right: 0;
+            margin-right: 50px;
+        }
+
+        /* Spacers for better spacing */
+        .spacer {
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+
+        .spacer-date-time {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        /* Search and clear button container styles */
+        .clear-search-go-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            margin-right: 50px;
+        }
+
+        /* Button styles */
+        button {
+            background-color: #ffbf00;
+            color: black;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./partials/header'); %>
+    <div class="date-time-container">
+        <div class="date-time-inner-container">
+            <div>
+                Start Date:<span class="spacer-date-time"></span>
+                <input type="date" id="startDate">
+                <span class="spacer"></span>
+                Start Time:<span class="spacer-date-time"></span>
+                <input type="time" id="startTime">
+                <span class="spacer"></span>
+                <button onclick="clearStart()">Clear</button>
+            </div>
+            <div>
+                End Date: <span class="spacer-date-time"></span>
+                <input type="date" id="endDate">
+                <span class="spacer"></span>
+                End Time: <span class="spacer-date-time"></span>
+                <input type="time" id="endTime">
+                <span class="spacer"></span>
+                <button onclick="clearEnd()">Clear</button>
+            </div>
+        </div>
+        <div class="clear-all-container">
+            <button onclick="clearAll()">Clear All</button>
+        </div>
+    </div>
+    <div class="clear-search-go-container">
+        <button onclick="clearSearch()">Clear Search</button>
+        <span class="spacer"></span>
+        <button onclick="filterFamilies()">Search</button>
+    </div>
+                <table id="originalTable" class="table table-striped table-hover mx-auto professional-style">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom</th>
+                            <th>Prénom</th>
+                            <th>Adresse</th>
+                            <th>Téléphone</th>
+                            <th>Email</th>
+                            <th>Location</th>
+                            <th>Etat</th>
+                            <th>Membres de la famille</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% function createAnchor(content, link) { %>
+                            <% return `<a href="${link}">${content}</a>`; %>
+                        <% } %>
+                        <% abonnements.sort((a, b)=> a.Id - b.Id); %>
+                        <% for (let i=0; i < abonnements.length; i++) { %>
+                            <tr id="abonnement-<%= abonnements[i].Id %>">
+                                <% const familyMembers=abonnements[i].FamilyMembers.split(',')
+                                    .map(abonnementid=> parseInt(abonnementid.trim()));
+                                %>
+                                <% const firstMember=personnes.find(person=> person.Id ===
+                                    familyMembers[0]); %>
+                                <% const familleLink="/rapport/details_familles/" +
+                                        firstMember.Id %>
+                                <td>
+                                    <%- createAnchor(abonnements[i].Id, familleLink) %>
+                                </td>
+                                <td>
+                                    <%- createAnchor(firstMember.FirstName, familleLink)
+                                        %>
+                                </td>
+                                <td>
+                                    <%- createAnchor(firstMember.LastName, familleLink)
+                                        %>
+                                </td>
+                                <td data-column-name="Adresse">
+                                    <%- createAnchor(abonnements[i].Adresse,
+                                        familleLink) %>
+                                </td>
+                                <td data-column-name="Telephone">
+                                    <%- createAnchor(abonnements[i].Telephone,
+                                        familleLink) %>
+                                </td>
+                                <td data-column-name="Email">
+                                    <%- createAnchor(abonnements[i].Email, familleLink)
+                                        %>
+                                </td>
+                                <td data-column-name="Location">
+                                    <%- createAnchor(abonnements[i].Location,
+                                        familleLink) %>
+                                </td>
+                                <td data-column-name="Etat">
+                                    <%- createAnchor(abonnements[i].Etat, familleLink)
+                                        %>
+                                </td>
+                                <td>
+                                    <a href="<%= familleLink %>">
+                                        <% for (let j=1; j < familyMembers.length; j++)
+                                            { %>
+                                            <% const otherMember=personnes.find(person=>
+                                                person.Id === familyMembers[j]); %>
+                                            <% const fullNameOther=otherMember.FirstName + " " + otherMember.LastName %><%= fullNameOther %>
+                                            <%= (j !==familyMembers.length - 1) ? ',' : '' %>
+                                        <% } %>
+                                    </a>
+                                </td>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div id="data-container" style="display:none;"
+        data-commandes='<%- JSON.stringify(commandes) %>'
+        data-services='<%- JSON.stringify(services) %>'
+        data-abonnements='<%- JSON.stringify(abonnements) %>'
+        data-offices='<%- JSON.stringify(offices) %>'
+        data-users='<%- JSON.stringify(users) %>'
+        data-personnes='<%- JSON.stringify(personnes) %>'>
+    </div> 
+    <script src="/scripts/details_abonnement_inactif.script.js"></script>
+    <%- include('./partials/footer'); %>
+    </body>
+</html>

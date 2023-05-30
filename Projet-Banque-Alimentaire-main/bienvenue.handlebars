@@ -1,0 +1,81 @@
+<html>
+
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #333;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            margin-bottom: 10px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        label {
+            margin-right: 10px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <p>Bienvenue chez (NONAMEYET), {{firstname}},</p>
+    <p>Afin de finaliser votre abonnement chez (NONAMEYET), nous vous invitons à cliquer juste sur confirmer.</p>
+    <p>S'il s'agit d'une erreur ou de quelqu'un usurpant votre identité, veuillez appuyer sur Annuler</p>
+    <p>Assurez vous de verifier les informations suivantes avant de procéder à la finalisation de votre abonnement.</p>
+
+
+    <p> Vous : {{firstname}} {{lastname}}</p>
+    
+    {{#if family}}
+    <p>Votre famille : </p>
+    <ul>
+
+        {{#each family}}
+        <li>{{this.FirstName}} {{this.LastName}}</li>
+        {{/each}}
+    </ul>
+    {{/if}}
+    <p> À la succursale suivante : {{Location}}</p>
+
+    
+    <form id="subscriptionForm" action="http://{{link}}" method="POST">
+        <input type="hidden" name="code" value="{{code}}">
+        <label for="confirm">Confirmer</label>
+        <input type="radio" name="acceptance" value="confirm" id="confirm">
+        <br>
+        <label for="cancel">Annuler</label>
+        <input type="radio" name="acceptance" value="cancel" id="cancel">
+        <br>
+        <button type="submit" onclick="submitForm()">Confirmer</button>
+    </form>
+</body>
+
+</html>

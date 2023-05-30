@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="fr" ng-app="myApp">
+
+<%- include('./partials/newhead'); %>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <script>
+
+
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', ['$scope', '$http', function ($scope, $http) {
+            $scope.currentOffice = "";
+            $scope.currentService = "";
+            $scope.currentEmail = "";
+            $scope.currentPayer = "";
+            $scope.employee ="<%= employeeName %>";
+            $scope.emailselected = false;
+
+            $scope.addHiddenInputsAndSubmitForm = function () {
+                if ($scope.myForm.$invalid) {
+                    alert('Veuillez remplir tous les champs obligatoires');
+                } else {
+
+                    const form = document.getElementById('profile-update-form');
+
+                    form.submit();
+                }
+
+
+                // your code here
+            }
+            $scope.fetchPayers = function () {
+                console.log("SELECTED");
+                if ($scope.currentEmail) {
+                    $http.get('/api/clients/' + $scope.currentEmail)
+                        .then(function (response) {
+                            console.log(response.data);
+                            $scope.payers = response.data;
+                        })
+                        .catch(function (error) {
+                            console.error('Error fetching payer data:', error);
+                        });
+                } else {
+                    $scope.payers = null;
+                }
+            };
+        }]);
+        document.addEventListener('DOMContentLoaded', async () => {
+            const dateInput = document.getElementById("dateInput");
+            const timeInput = document.getElementById("timeInput");
+
+            // Get the current date
+            const now = new Date();
+
+            // Format the date as a string in the correct format for the input
+            const dateString = now.getFullYear().toString() + "-" +
+                (now.getMonth() + 1).toString().padStart(2, "0") + "-" +
+                now.getDate().toString().padStart(2, "0");
+            // Format the time as a string in the correct format for the input
+            const timeString = now.getHours().toString().padStart(2, "0") + ":" +
+                now.getMinutes().toString().padStart(2, "0");
+
+            // Set the default value of the input to the current time
+            timeInput.value = timeString;
+            // Set the default value of the input to the current date
+            dateInput.value = dateString;
+
+            function displaySearchResults(results) {
+                searchResults.innerHTML = ''; // Effacer les anciennes options
+
+                for (const result of results) {
+                    const option = document.createElement('option');
+                    option.value = result.Id;
+                    option.textContent = result.LastName + ', ' + result.FirstName;
+                    searchResults.appendChild(option);
+                }
+
+                searchResults.classList.remove('hidden');
+            }
+
+
+
+
+        });
+
+    </script>
+
+    <body ng-controller="myCtrl">
+
+        <%- include('./partials/newHeader'); %>
+            <!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+            <section class="global-page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="block">
+                                <h2>Commandes</h2>
+                                <ol class="breadcrumb list-inline text-center">
+                                    <li class="list-inline-item">
+                                        <a href="index.html">
+                                            <i class="ion-ios-home"></i>
+                                            Accueil &nbsp; &nbsp;/
+                                        </a>
+                                    </li>
+                                    <li class="active list-inline-item">Commandes</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <section id="contact-section">
+                <div class="container">
+                    <div class="form-container">
+                        <form id="commandForm" ng-model="commandForm" name="commandForm" action="/command" method="post"
+                            ng-submit="submit">
+
+                            <div class="form-group">
+                                <label for="currentOffice">Bureau actuel :</label>
+                                <select class="form-control chosen-select" id="currentOffice" name="currentOffice"
+                                    ng-model="currentOffice" ng-required="true">
+                                    <option value="">--Entrez la succursale actuelle--</option>
+                                    <% offices.forEach(office=> { %>
+                                        <option value="<%= office.Id %>">
+                                            <%= office.Name %>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                                <span
+                                    ng-show="commandForm.currentOffice.$touched && commandForm.currentOffice.$invalid">This
+                                    field is required.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="service">Service :</label>
+                                <select class="form-control" id="service" name="service" ng-model="currentService"
+                                    ng-required="true">
+                                    <option value="">--Entrez le service correspondant--</option>
+                                    <% services.forEach(service=> { %>
+                                        <option value="<%= service.Id %>">
+                                            <%= service.Name %> - <%= service.Price %>$
+                                        </option>
+                                        <% }); %>
+                                </select>
+                                <span ng-show="commandForm.service.$touched && commandForm.service.$invalid">This field
+                                    is required.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="emailSelect">Email :</label>
+                                <select class="form-control" id="emailSelect" name="email" ng-model="currentEmail"
+                                    ng-change="fetchPayers()" ng-required="true">
+                                    <option value="">--Entrez une adresse électronique--</option>
+                                    <% abonnements.forEach(abonnement=> { %>
+                                        <option value="<%= abonnement.Id %>">
+                                            <%= abonnement.Email %>
+                                        </option>
+                                        <% }); %>
+                                </select>
+                                <span ng-show="commandForm.email.$touched && commandForm.email.$invalid">This field is
+                                    required.</span>
+                            </div>
+
+                            <div class="form-group" ng-show="commandForm.email.$valid">
+                                <label for="personne">Payeur :</label>
+                                <select class="form-control" id="personne" name="personne" ng-model="currentPayer"
+                                    ng-required="true">
+                                    <option value="">--Choisissez la personne étant venue payer--</option>
+                                    <option ng-repeat="payer in payers" value="{{payer.Id}}">{{payer.FirstName}}
+                                        {{payer.LastName}}</option>
+
+                                </select>
+                                <span ng-show="commandForm.personne.$touched && commandForm.personne.$invalid">This
+                                    field is required.</span>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="employee">Employé :</label>
+                                <input class="form-control" type="text" id="employee" name="employee"
+                                    ng-model="employee" ng-readonly="true" placeholder="Nom de l'employé"
+                                    value="<%= employeeName %>"></input>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="dateInput">Date :</label>
+                                <input class="form-control" type="date" id="dateInput" name="dateInput"
+                                    ng-model="dateInput" ng-required="true">
+                                <br><br>
+                                <span ng-show="commandForm.dateInput.$touched && commandForm.dateInput.$invalid">This
+                                    field is required.</span>
+
+                                <label for="timeInput">Time :</label>
+                                <input class="form-control" type="time" id="timeInput" name="timeInput"
+                                    ng-model="timeInput" ng-required="true">
+                                <br><br>
+                                <span ng-show="commandForm.timeInput.$touched && commandForm.timeInput.$invalid">This
+                                    field is required.</span>
+
+                                <label for="notesInput">Notes :</label>
+                                <textarea class="form-control" id="notesInput" name="notesInput" ng-model="notesInput"
+                                    rows="5" cols="50"></textarea>
+                            </div>
+
+                            <button type="submit" ng-click="submit" value="Submit"
+                                class="btn btn-primary">Submit</button>
+
+
+                        </form>
+                    </div>
+                </div>
+
+            </section>
+
+    </body>
+    <%- include('./partials/newFooter'); %>
+
+</html>

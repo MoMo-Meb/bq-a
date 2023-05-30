@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+ $(function(){
+  $("#country").select2();
+ }); 
+</script>
+<body>
+<div class="signupdiv">
+ <form id="signupform">
+  <h3 class="text-center">Signup Form</h3>
+  <input type="text" id="name" placeholder="Your Name *" required>
+  <input type="email" id="email" placeholder="Your Email *" required>
+  <select id="country">  
+   <option value="">Select your country</option>
+   <option value="US">United States of America</option>
+   <option value="KE">Kenya</option>
+   <option value="UK">United Kingdom</option>
+   <option value="IN">India</option>
+   <option value="CN">China</option>
+   <option value="CA">Canada</option>
+   <option value="ZA">South Africa</option>
+  </select>
+  <input type="password" id="password" placeholder="Create a Password *" required>
+  <input type="password" id="password" placeholder="Confirm Password *" required>
+ <button type="submit">Sign Up</button>
+ </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/newhead'); %>
+    <style>
+        :root {
+
+            --snippet-background: #3eca5a;
+            --snippet-background-darkish: #3e8d42;
+            --snippet-background-shadow: #2b5c33;
+            --page-background: #fff;
+            --error-text: #f04343;
+        }
+
+        table.second-table-content {
+            width: 75%;
+            border-collapse: collapse;
+            margin: 0 auto;
+            /* Center the table horizontally */
+        }
+
+        table.main-table-content th,
+        table.main-table-content td {
+            text-align: center;
+            padding: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        table.second-table-content th,
+        table.second-table-content td {
+            text-align: center;
+            padding: 5px;
+            border: 1px solid rgba(128, 128, 128, 0.25);
+        }
+
+        table.second-table-content th {
+            text-align: center;
+        }
+
+        table.second-table-content th {
+            background-color: gray;
+        }
+
+        table.main-table-content th {
+            background-color: var(--snippet-background);
+        }
+
+        table.main-table-content tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        table.main-table-content tr {
+            background-color: white;
+        }
+
+        .action-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .clear-search-container {
+            position: absolute;
+            right: 0;
+            margin-right: 50px;
+        }
+
+        /* Button styles */
+        button {
+            background-color: var(--snippet-background);
+            color: black;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 10px;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .main-page-content {
+            margin-bottom: 50px;
+        }
+
+        .particularities-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .particularity {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f2f2f2;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 5px 10px;
+            margin: 5px;
+        }
+
+        .remove-btn {
+            background-color: rgba(0, 0, 0, 0);
+            color: rgb(0, 0, 0);
+            margin-left: 5px;
+            border-radius: 50%;
+            padding: 2px 5px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+    </head>
+
+    <body>
+        <%- include('./partials/newHeader'); %>
+
+
+
+            <section class="global-page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="block">
+                                <h2>Détails familaux : </h2>
+                                <ol class="breadcrumb list-inline text-center">
+                                    <li class="list-inline-item">
+                                        <a href="/">
+                                            <i class="ion-ios-home"></i>
+                                            Accueil &nbsp; &nbsp;/
+                                        </a>
+                                    </li>
+                                    <li class="active list-inline-item">Détails familiaux</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <div class="main-page-content">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <div class="action-container">
+                                <div class="particularity-container">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-5 mb-md-0">
+                                            <Label>Adresse Mail: </Label>
+                                            <input class="form-control" type="text" id="emailsearchValue"
+                                                placeholder="Rechercher..." onchange="filterParticularity()">
+                                            <br>
+                                            <Label>Particularité(s): </Label>
+                                            <input class="form-control" type="text" id="searchValue"
+                                                placeholder="Rechercher..."
+                                                onkeydown="if (event.keyCode == 13) filterParticularity()">
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="commande">Commande :</label>
+                                            <select id="commande" class="form-control" name="commande"
+                                                onchange="filterParticularity() + showDateFilters()">
+                                                <option value="" selected>Aucun Filtre</option>
+                                                <option value="Aucune">Aucune Commandes</option>
+                                                <option value="Commande">En court de préparation</option>
+                                                <option value="Prepare">En attente de récupération</option>
+                                                <option value="Recupere">Récupéré</option>
+                                                <option value="Commande, Prepare, Recupere">Tous</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <br>
+                                    <button onclick="filterParticularity()">Rechercher</button>
+                                    <button onclick="clearSearch()">Vider le Champ</button>
+                                    <button onclick="clearAll()">Supprimer les filtres</button>
+                                    <br>
+                                    <div style="display:none" id="date-filter-container">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-5 mb-md-0">
+                                                Date:<span class="spacer-date-time"></span>
+                                                <input class="form-control" type="date" id="startDate"
+                                                    onchange="filterParticularity() + showEndDate()">
+                                                <span class="spacer"></span>
+                                            </div>
+                                            <div style="display:none" id="endDateContainer"
+                                                onchange="filterParticularity()" class="col-md-6">
+                                                Interval - Date de fin : <span class="spacer-date-time"></span>
+                                                <input class="form-control" type="date" id="endDate">
+                                                <span class="spacer"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+
+                                        <div class="clear-search-container">
+                                        </div>
+
+                                    </div>
+                                    <div id="particularities-list"></div>
+                                    <div class="top-section">
+                                        <div class="indice">
+                                            <span class="text-gray"><strong>Note:</strong> pour procéder à toute
+                                                modification relative
+                                                aux abonnements, veuillez cliquer sur le bouton 'Modifier' ou
+                                                'Supprimer'.</span>
+                                            <span class="text-gray"><br>Pour modifier les informations d'une personne et
+                                                de
+                                                ses membres
+                                                de famille, veuillez cliquer sur la rangée correspondante.</span>
+                                            <p id="alert-message"></p>
+                                        </div>
+                                        <div class="add-button-section">
+                                            <a href="/inscription_famille"><button
+                                                    class="add-button btn btn-secondary">Add</button></a>
+                                        </div>
+                                    </div>
+                                    <!--            <div class="export-button-section">
+                                        <button type="button" class="btn btn-success"
+                                            onclick="exportTableToExcel()">Export
+                                            to Excel</button>
+                                        <button type="button" class="btn btn-warning" onclick="saveHTMLAsPDF()">Export
+                                            to
+                                            PDF</button>
+                                    </div> -->
+
+                                </div>
+                            </div>
+                            <table class="main-table-content">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Adresse</th>
+                                        <th>Téléphone</th>
+                                        <th>Email</th>
+                                        <th>Etat de Compte</th>
+                                        <th>Succursale</th>
+                                        <th>Particularité(s)</th>
+                                        <th>Modifier</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% function createAnchor(content, link) { %>
+                                        <% return `<a href="${link}">${content}</a>`; %>
+                                            <% } %>
+                                                <% abonnements.sort((a, b)=> a.Id - b.Id); %>
+                                                    <% for (let i=0; i < abonnements.length; i++) { %>
+                                                        <tr id="abonnement-<%= abonnements[i].Id %>">
+                                                            <% const
+                                                                familyMembers=abonnements[i].FamilyMembers.split(',')
+                                                                .map(abonnementid=> parseInt(abonnementid.trim())); %>
+                                                                <% const firstMember=personnes.find(person=> person.Id
+                                                                    ===
+                                                                    familyMembers[0]); %>
+                                                                    <% const familleLink="/rapport/details_familles/" +
+                                                                        firstMember.Id %>
+                                                                        <td>
+                                                                            <%- createAnchor(abonnements[i].Id,
+                                                                                familleLink) %>
+                                                                        </td>
+
+                                                                        <td class="editable" data-column-name="Adresse">
+                                                                            <%- createAnchor(abonnements[i].Adresse,
+                                                                                familleLink) %>
+                                                                        </td>
+                                                                        <td class="editable"
+                                                                            data-column-name="Telephone">
+                                                                            <%- createAnchor(abonnements[i].Telephone,
+                                                                                familleLink) %>
+                                                                        </td>
+                                                                        <td class="editable" data-column-name="Email">
+                                                                            <%- createAnchor(abonnements[i].Email,
+                                                                                familleLink) %>
+                                                                        </td>
+                                                                        <td class="editable" data-column-name="Etat">
+                                                                            <%- createAnchor(abonnements[i].Etat,
+                                                                                familleLink) %>
+                                                                        </td>
+                                                                        <td class="editable"
+                                                                            data-column-name="Location">
+                                                                            <%- createAnchor(abonnements[i].Location,
+                                                                                familleLink) %>
+                                                                        </td>
+                                                                        <td>
+                                                                            <table class="second-table-content">
+                                                                                <thead>
+                                                                                    <tr>
+                                                                                        <% for (let j=0; j <
+                                                                                            familyMembers.length; j++) {
+                                                                                            %>
+                                                                                            <% const
+                                                                                                familiyMembers=personnes.find(person=>
+                                                                                                person.Id ===
+                                                                                                familyMembers[j]);
+                                                                                                %>
+                                                                                                <% const
+                                                                                                    fullNameOther=familiyMembers.FirstName
+                                                                                                    + " " +
+                                                                                                    familiyMembers.LastName
+                                                                                                    %>
+                                                                                                    <th><a href="<%= familleLink %>"
+                                                                                                            style="text-decoration: none;">
+                                                                                                            <%= fullNameOther
+                                                                                                                %>
+                                                                                                        </a></th>
+                                                                                                    <% } %>
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    <tr>
+                                                                                        <% for (let j=0; j <
+                                                                                            familyMembers.length; j++) {
+                                                                                            %>
+                                                                                            <% const
+                                                                                                familiyMembers=personnes.find(person=>
+                                                                                                person.Id ===
+                                                                                                familyMembers[j]);
+                                                                                                %>
+                                                                                                <td>
+                                                                                                    <%= familiyMembers.Particularities
+                                                                                                        %>
+                                                                                                </td>
+                                                                                                <% } %>
+                                                                                    </tr>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </td>
+
+                                                                        <td class="last-td">
+                                                                            <div class="buttons-container">
+                                                                                <button
+                                                                                    class="remove-button btn btn-danger"
+                                                                                    onclick="removeTableRow(this.parentNode.parentNode.parentNode)">Supprimer</button>
+                                                                                <button
+                                                                                    class="edit-button btn btn-primary"
+                                                                                    onclick="editTableRow(this.parentNode.parentNode.parentNode)">Modifier</button>
+                                                                                <button
+                                                                                    class="save-button btn btn-success"
+                                                                                    onclick="saveTableRow(this.parentNode.parentNode.parentNode)">Sauvegarder</button>
+                                                                                <button
+                                                                                    class="cancel-button btn btn-warning"
+                                                                                    onclick="cancelEditTableRow(this.parentNode.parentNode.parentNode)">Annuler</button>
+                                                                            </div>
+                                                                        </td>
+                                                        </tr>
+                                                        <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="data-container" style="display:none;" data-abonnements='<%- JSON.stringify(abonnements) %>'
+                    data-personnes='<%- JSON.stringify(personnes) %>' data-commandes='<%- JSON.stringify(commandes) %>'>
+                </div>
+                <script src="/scripts/details_particularites.script.js"></script>
+                <script src="/scripts/details_familles.script.js"></script>
+                <%- include('./partials/newFooter'); %>
+    </body>
+
+</html>

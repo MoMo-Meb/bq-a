@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html ng-app="myApp">
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>                         
+
+<%- include('./partials/newhead'); %>
+
+	<body ng-controller="myCtrl">
+
+    <!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+
+    <%- include('./partials/newHeader'); %>
+
+      <!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+      <section class="global-page-header">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="block">
+                <h2>Formulaires Expérimentales : </h2>
+                <ol class="breadcrumb list-inline text-center">
+                  <li class="list-inline-item">
+                    <a href="/">
+                      <i class="ion-ios-home"></i>
+                      Accueil &nbsp; &nbsp;/
+                    </a>
+                  </li>
+                  <li class="active list-inline-item">Formulaires Expérimentales</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact-section">
+        <div class="container">
+          <form name="myForm" id="myForm" action="/submit_dynamic_form" method="POST" novalidate>
+
+            <div class="row">
+              <div class="col-md-6 mb-5 mb-md-0">
+                <input type="hidden" name="table" value="<%=table%>" />
+                <% for (let i=0; i < columns.length; i++) { %>
+                  <% if (!columns[i].Field.includes('Id')) {%>
+                    <div class="form-group wow fadeInDown" data-wow-duration="500ms" data-wow-delay=".7s">
+                      <label for="<%= columns[i].Field %>">
+                        <%= columns[i].Field %>
+                      </label>
+                      <% if (columns[i].Type.includes('varchar') || columns[i].Type.includes('text')) { %>
+
+                        <input type="text" class="form-control" id="<%= columns[i].Field %>"
+                          name="<%= columns[i].Field %>" ng-required="true" />
+                        <span
+                          ng-show="myForm.<%= columns[i].Field %>.$touched && myForm.<%= columns[i].Field %>.$invalid">This
+                          field is required.</span>
+                        <% } else if (columns[i].Type.includes('int')) { %>
+                          <input type="number" class="form-control" id="<%= columns[i].Field %>"
+                            name="<%= columns[i].Field %>" />
+                          <% } else if (columns[i].Type.includes('float') || columns[i].Type.includes('double')) { %>
+                            <input type="number" class="form-control" step="0.01" id="<%= columns[i].Field %>"
+                              name="<%= columns[i].Field %>" />
+                            <% } else if (columns[i].Type.includes('date')) { %>
+                              <input type="date" id="<%= columns[i].Field %>" class="form-control"
+                                name="<%= columns[i].Field %>" />
+                              <% } else if (columns[i].Type.includes('enum')) { %>
+                                <select id="<%= columns[i].Field %>" class="form-control"
+                                  name="<%= columns[i].Field %>">
+                                  <% const values=columns[i].Type.match(/'([^']+)'/g); %>
+                                    <% for (let j=0; j < values.length; j++) { %>
+                                      <option value="<%= values[j].slice(1, -1) %>">
+                                        <%= values[j].slice(1, -1) %>
+                                      </option>
+                                      <% } %>
+                                </select>
+                                <% } %>
+                                  <% } %>
+                                    <% } %>
+                    </div>
+                    <button type="submit">Submit</button>
+
+              </div>
+
+            </div>
+          </form>
+
+
+
+        </div>
+
+
+
+      </section>
+      <!--
+            ==================================================
+            Call To Action Section Start
+            ================================================== -->
+
+      <%- include('./partials/contactme'); %>
+
+        <!--
+                    ==================================================
+                    Footer Section Start
+                    ================================================== -->
+
+
+        <%- include('./partials/newFooter'); %>
+          <!-- /#footer -->
+
+          <!-- Template Javascript Files
+	================================================== -->
+          <!-- jquery -->
+          <script src="plugins/jQurey/jquery.min.js"></script>
+          <!-- Form Validation -->
+          <script src="plugins/form-validation/jquery.form.js"></script>
+          <script src="plugins/form-validation/jquery.validate.min.js"></script>
+          <!-- slick slider -->
+          <script src="plugins/slick/slick.min.js"></script>
+          <!-- bootstrap js -->
+          <script src="plugins/bootstrap/bootstrap.min.js"></script>
+          <!-- wow js -->
+          <script src="plugins/wow-js/wow.min.js"></script>
+          <!-- slider js -->
+          <script src="plugins/slider/slider.js"></script>
+          <!-- Fancybox -->
+          <script src="plugins/facncybox/jquery.fancybox.js"></script>
+          <!-- template main js -->
+          <script src="js/main.js"></script>
+  </body>
+
+</html>

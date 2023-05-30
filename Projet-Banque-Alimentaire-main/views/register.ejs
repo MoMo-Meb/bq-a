@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<script>
+  function checkFields() {
+    const inputs = document.querySelectorAll('input');
+    const button = document.querySelector('button[type="submit"]');
+    const password1 = document.getElementById('password');
+    const password2 = document.getElementById('passwordValidation');
+
+    // Vérifie si tous les champs sont remplis
+    const allFilled = Array.from(inputs).every(input => input.value.trim() !== '');
+
+    // Vérifie si les deux mots de passe sont identiques
+    const passwordsMatch = password1.value === password2.value;
+
+    // Active ou désactive le bouton en fonction de l'état de remplissage des champs et de la correspondance des mots de passe
+    button.disabled = !(allFilled && passwordsMatch);
+  }
+
+  function init() {
+    const inputs = document.querySelectorAll('input');
+
+    // Attache l'événement 'input' à chaque champ pour vérifier si tous les champs sont remplis et si les mots de passe correspondent
+    inputs.forEach(input => input.addEventListener('input', checkFields));
+
+    // Vérifie initialement si tous les champs sont remplis et si les mots de passe correspondent
+    checkFields();
+  }
+
+  // Initialise la fonction lors du chargement de la page
+  document.addEventListener('DOMContentLoaded', init);
+</script>
+
+
+<%- include('./partials/newhead'); %>
+
+
+  <body>
+    <%- include('./partials/newHeader'); %>
+
+      <!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+      <section class="global-page-header">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="block">
+                <h2>Création de Compte Employé</h2>
+                <ol class="breadcrumb list-inline text-center">
+                  <li class="list-inline-item">
+                    <a href="index.html">
+                      <i class="ion-ios-home"></i>
+                      Accueil &nbsp; &nbsp;/
+                    </a>
+                  </li>
+                  <li class="active list-inline-item">Création de Compte Employé</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact-section">
+        <div class="container">
+          <h1>Formulaire d'inscription</h1>
+          <form name="myForm" id="myForm" action="/submit" method="POST" novalidate>
+
+            <div class="row">
+              <div class="col-md-6 mb-5 mb-md-0">
+                <div class="form-group">
+                  <label for="lastname">Nom :</label>
+                  <input class="form-control" type="text" id="lastname" name="lastname" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="firstname">Prénom:</label>
+                  <input class="form-control" type="text" id="firstname" name="firstname" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="email">Adresse email :</label>
+                  <input class="form-control" type="email" id="email" name="email" required>
+                </div>
+
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="phone">Numéro de téléphone :</label>
+                  <input class="form-control" type="tel" id="phone" name="phone" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="password">Mot de passe :</label>
+                  <input class="form-control" type="password" id="password" name="password" required>
+                </div>
+
+                <div class="form-group">
+                  <label for="passwordValidation">Confirmation du mot de passe :</label>
+                  <input class="form-control" type="password" id="passwordValidation" name="passwordValidation"
+                    required>
+                </div>
+                <div class="form-group wow fadeInDown" data-wow-duration="500ms"
+                data-wow-delay=".7s">
+  
+                <label for="sexe">Type de Compte :</label>
+                <select id="accounttype" class="form-control" name="accounttype" ng-model="accounttype"
+                  ng-required="true">
+                  <option value="" selected>-- Selectionnez un type de compte --</option>
+                  <option value="ACCOUNTANT" selected>Comptable</option>
+                  <option value="SECRETARY" selected>Secrétaire</option>
+                  <option value="ADMIN" selected>Administrateur</option>
+                </select><br>
+  
+              </div>
+              </div>
+
+              <div id="submit" class="wow fadeInDown" data-wow-duration="500ms" data-wow-delay="1.4s">
+                <button type="submit" id="contact-submit"
+                  class="btn btn-default btn-send hvr-bounce-to-right">Suivant</button>
+              </div>
+            </div>
+          </form>
+        </div>
+
+
+
+      </section>
+
+
+      <%- include('./partials/newFooter'); %>
+       
+  </body>
+
+</html>

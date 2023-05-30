@@ -1,0 +1,107 @@
+html, body, header, nav {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+html {
+    background-color: #ffffff;
+}
+
+
+
+/* Style for form container */
+#form-container {
+  max-width: 600px;
+  margin: auto;
+}
+
+/* Style for form labels */
+label {
+  display: block;
+  margin-top: 1rem;
+}
+
+/* Style for form input fields */
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+select {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+  margin-top: 0.5rem;
+}
+
+/* Style for error messages */
+.error-message {
+  color: red;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Style for add family member button */
+button[type="button"] {
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Style for remove family member button */
+button[type="button"]:last-of-type {
+  margin-top: 0.5rem;
+}
+
+/* Style for submit button */
+input[type="submit"] {
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+/* Style for disabled submit button */
+input[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Style for form header */
+#form-header {
+  background-color: #007bff;
+  color: #fff;
+  padding: 0.5rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Style for form footer */
+#form-footer {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  color: #999;
+}
+.family-box {
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-left: 20px;
+  height: 200px;
+  overflow-y: scroll;
+}

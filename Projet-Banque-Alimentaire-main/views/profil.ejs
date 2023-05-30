@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<%- include('./partials/newhead'); %>
+
+
+    <body ng-controller="myCtrl">
+        <%- include('./partials/newHeader'); %>
+            <section class="global-page-header">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="block">
+                                <h2>Profil: </h2>
+                                <ol class="breadcrumb list-inline text-center">
+                                    <li class="list-inline-item">
+                                        <a href="/">
+                                            <i class="ion-ios-home"></i>
+                                            Accueil &nbsp; &nbsp;/
+                                        </a>
+                                    </li>
+                                    <li class="active list-inline-item">Profil</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <main>
+                <section>
+                    <section id="contact-section">
+                        <div class="container">
+                            <h1>Mon Profil Employé : </h1>
+                            <form id="myForm" name="myForm" action="/profil/update" method="post">
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-5 mb-md-0">
+                                        <div class="form-group" id="inputs">
+                                            <label for="firstName">Prénom :</label>
+                                            <input class="form-control" type="text" ng-model="name" id="name"
+                                                name="name" value="<%= userInfos.FirstName %>" required
+                                                ng-readonly="!Editing">
+                                        </div>
+
+                                        <div class="form-group" id="inputs">
+                                            <label for="lastName">Nom :</label>
+                                            <input class="form-control" type="text" ng-model="lastname" id="lastname"
+                                                name="lastname" value="<%= userInfos.LastName %>" required
+                                                ng-readonly="!Editing">
+                                        </div>
+
+                                        <div class="form-group" id="inputs">
+                                            <label for="email">Adresse électronique :</label>
+                                            <input class="form-control" type="email" ng-model="email" id="email"
+                                                name="email" value="<%= userInfos.Email %>" required
+                                                ng-readonly="!Editing">
+                                        </div>
+
+                                        <div class="form-group" id="inputs">
+                                            <label for="phone">No# de Téléphone :</label>
+                                            <input class="form-control" type="phone" ng-model="phone" id="phone"
+                                                name="phone" value="<%= userInfos.Telephone %>" required
+                                                ng-readonly="!Editing">
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+
+                                        <div ng-show="Editing" id="password-fields">
+                                            <div class="form-group" id="inputs">
+                                                <label for="password">Mot de passe actuel :</label>
+                                                <input ng-model="password" class="form-control" type="password"
+                                                    id="password" name="password" value="<%= userInfos.Password %>" required
+                                                    ng-readonly="!Editing">
+                                            </div>
+                                            <div class="">
+                                                <label for="newPassword">Nouveau mot de passe :</label>
+                                                <input class="form-control" type="password" ng-model="newPassword"
+                                                    id="newPassword" name="newPassword" ng-readonly="!Editing">
+                                            </div>
+
+                                            <div class="">
+                                                <label for="confirmPassword">Confirmer le nouveau mot de passe :</label>
+                                                <input class="form-control" type="password" ng-model="confirmPassword"
+                                                    id="confirmPassword" name="confirmPassword" ng-readonly="!Editing">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                                <div class="row">
+                                    <div ng-show="!Editing" class="wow fadeInDown" data-wow-duration="500ms"
+                                        data-wow-delay="1.4s">
+                                        <button type="button" ng-click="EditAccount()" id="edit-button"
+                                            class="btn btn-default btn-send hvr-bounce-to-right">Modifier Vos
+                                            Information</button>
+                                    </div>
+                                    <div ng-show="Editing" class="wow fadeInDown" data-wow-duration="500ms"
+                                        data-wow-delay="1.4s">
+                                        <button type="button" id="update-button" ng-click="submitFormWithPassword"
+                                            class="btn btn-default btn-send hvr-bounce-to-right"
+                                            ng-disabled="myForm.newPassword.$invalid || myForm.password.$invalid || myForm.confirmPassword.$invalid || newPassword !== confirmPassword || newPassword.length < 8">Modifier
+                                            Mot de Passe</button>
+                                    </div>
+                                    <div ng-show="Editing" class="wow fadeInDown" data-wow-duration="500ms"
+                                        data-wow-delay="1.4s">
+                                        <button type="button" id="submit-button" ng-click="submitForm()"
+                                            class="btn btn-default btn-send hvr-bounce-to-right" ng-disabled="">Mettre
+                                            a Jour</button>
+                                    </div>
+                                    <div ng-show="Editing" ng-click="CancelEdit()" class="wow fadeInDown"
+                                        data-wow-duration="500ms" data-wow-delay="1.4s">
+                                        <button type="button" id="cancel-button"
+                                            class="btn btn-default btn-send hvr-bounce-to-right">Annuler</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </section>
+            </main>
+
+            <%- include('./partials/contactme'); %>
+                <%- include('./partials/newFooter'); %>
+    </body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <!-- Insérez ici vos liens vers les fichiers JavaScript -->
+    <script>
+
+        var app = angular.module('myApp', []);
+        app.controller('myCtrl', function ($scope) {
+
+            const cancelButton = document.getElementById('cancel-button');
+            const editButton = document.getElementById('edit-button');
+            const updateButton = document.getElementById('update-button');
+            const passwordFields = document.getElementById('password-fields');
+            $scope.OriginalUserInfo = "<%=userInfos%>";
+            $scope.name = "<%=userInfos.FirstName%>";
+            $scope.lastname = "<%=userInfos.LastName%>";
+            $scope.phone = "<%=userInfos.Telephone%>";
+            $scope.email = "<%=userInfos.Email%>";
+            $scope.password = "<%=userInfos.Password%>";
+            $scope.newPassword = '';
+            $scope.confirmPassword = '';
+            console.log("<%= userInfos.Password %>");
+            $scope.Editing = false;
+            $scope.EditAccount = function () {
+                $scope.Editing = true;
+                $scope.password = '';
+            }
+
+
+            $scope.CancelEdit = function () {
+                $scope.Editing = false;
+                $scope.name = "<%=userInfos.FirstName%>";
+                $scope.lastname = "<%=userInfos.LastName%>";
+                $scope.phone = "<%=userInfos.Telephone%>";
+                $scope.email = "<%=userInfos.Email%>";
+                $scope.password = "<%=userInfos.Password%>";
+                $scope.newPassword = '';
+                $scope.confirmPassword = '';
+
+            }
+            $scope.submitFormWithPassword = function () {
+                document.getElementById("myForm").submit();
+            }
+
+            $scope.submitForm = function () {
+                $scope.newPassword = '';
+                $scope.confirmPassword = '';
+                document.getElementById("myForm").submit();
+            }
+
+
+        });
+
+
+
+    </script>
+
+</html>

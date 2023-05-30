@@ -1,0 +1,73 @@
+<footer class="footer-distributed">
+    <div class = "footer-background">
+        <div class="footer-left">
+            <h3><span>Adrianna</span><br>Espace<br><span>Collectif</span></h3>
+            <p class="footer-links">
+                <a href="#"></a>
+            </p>
+        </div>
+        <div class="footer-center">
+            <div>
+                <i class="fa fa-map-marker"></i>
+                <p>Adresse:<span><br>2500, rue Ste-Catherine est, Montréal,<br>Québec, H2K 2K2</span></p>
+            </div>
+            <div>
+                <i class="fa fa-phone"></i>
+                <p><br>+1 (514) 527-9233</p>
+            </div>
+            <div>
+                <i class="fa fa-mail"></i>
+                <p><a href="https://mail.google.com/mail/?view=cm&to=distribution@aecmtl.org" target="_blank">distribution@aecmtl.org</a></p>
+            </div>
+        </div>
+
+        <div class="footer-right">
+            <p class="footer-company-about">
+                <span>About the company</span>
+                <strong>Name Of Company</strong>
+                Notre entreprise de banque alimentaire
+                fournit une aide essentielle en nourriture
+                pour les familles nécessiteuses.
+            </p>
+            <div class="footer-icons">
+                <a href="#"><img src="/images/logo_facebook.png" alt="Facebook"
+                        style="width: 25px; height: 25px; background-color: FFE600;"></a>
+                <a href="#"><img src="/images/logo_instagram.png" alt="Instagram"
+                        style="width: 25px; height: 25px; background-color: FFE600;"></a>
+                <a href="#"><img src="/images/logo_linkedin.png" alt="LinkedIn"
+                        style="width: 25px; height: 15px; background-color: FFE600;"></a>
+            </div>
+        </div>
+    </div>
+    <script>
+       function positionFooter() {
+    const footer = document.querySelector('.footer-distributed');
+    const body = document.body;
+    const windowHeight = window.innerHeight;
+    const footerHeight = footer.offsetHeight;
+
+    if (body.offsetHeight + footerHeight < windowHeight) {
+        footer.style.position = "fixed";
+        footer.style.bottom = "0";
+        footer.style.left = "0";
+        footer.style.right = "0";
+        body.style.marginBottom = `${footerHeight}px`;
+    } else {
+        footer.style.position = "static";
+        body.style.marginBottom = "0";
+    }
+}
+
+window.addEventListener('load', () => {
+    positionFooter();
+});
+
+window.addEventListener('resize', () => {
+    positionFooter();
+});
+
+        // stop here
+    </script>
+</footer>
+
+<%- include('./footer_style'); %>

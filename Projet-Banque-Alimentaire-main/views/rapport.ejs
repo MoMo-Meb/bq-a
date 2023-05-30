@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+
+<%- include('./partials/newhead'); %>
+
+  <style>
+    .rapport_container {
+      margin-top: 50px;
+    }
+  </style>
+
+  <body>
+    <!--
+        ==================================================
+        Header Section Start
+        ================================================== -->
+
+    <%- include('./partials/newHeader'); %>
+
+      <!-- 
+        ================================================== 
+            Global Page Section Start
+        ================================================== -->
+      <section class="global-page-header">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="block">
+                <h2>Rapports : </h2>
+                <ol class="breadcrumb list-inline text-center">
+                  <li class="list-inline-item">
+                    <a href="/">
+                      <i class="ion-ios-home"></i>
+                      Accueil &nbsp; &nbsp;/
+                    </a>
+                  </li>
+                  <li class="active list-inline-item">Rapports</li>
+                </ol>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="container rapport_container">
+        <% let optionSize=(Names.length===Descriptions.length && Descriptions.length===Links.length) ? Names.length : 0
+          %>
+          <div class="row justify-content-center">
+            <% for (var i=0; i < optionSize; i++) { %>
+              <div class="col-md-4 col-sm-6">
+                <figure class="wow fadeInLeft animated portfolio-item" data-wow-duration="500ms" data-wow-delay="0ms">
+                  <div class="img-wrapper">
+                    <img src="images/portfolio/item-report.png" class="img-fluid" alt="this is a title">
+                    <div class="overlay">
+                      <div class="buttons">
+                        <p>
+                          <%= Descriptions[i] %>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <figcaption>
+                    <h4 style="text-align: center;">
+                      <a href="<%= Links[i] %>">
+                        <%= Names[i] %>
+                      </a>
+                    </h4>
+                  </figcaption>
+                </figure>
+              </div>
+              <% } %>
+          </div>
+      </div>
+
+      <!--
+        ==================================================
+        Call To Action Section Start
+        ================================================== -->
+
+      <%- include('./partials/contactme'); %>
+
+        <!--
+                ==================================================
+                Footer Section Start
+                ================================================== -->
+
+
+        <%- include('./partials/newFooter'); %>
+          <!-- /#footer -->
+
+          <!-- Template Javascript Files
+================================================== -->
+          <!-- jquery -->
+          <script src="plugins/jQurey/jquery.min.js"></script>
+          <!-- Form Validation -->
+          <script src="plugins/form-validation/jquery.form.js"></script>
+          <script src="plugins/form-validation/jquery.validate.min.js"></script>
+          <!-- slick slider -->
+          <script src="plugins/slick/slick.min.js"></script>
+          <!-- bootstrap js -->
+          <script src="plugins/bootstrap/bootstrap.min.js"></script>
+          <!-- wow js -->
+          <script src="plugins/wow-js/wow.min.js"></script>
+          <!-- slider js -->
+          <script src="plugins/slider/slider.js"></script>
+          <!-- Fancybox -->
+          <script src="plugins/facncybox/jquery.fancybox.js"></script>
+          <!-- template main js -->
+          <script src="js/main.js"></script>
+  </body>
+</html>
