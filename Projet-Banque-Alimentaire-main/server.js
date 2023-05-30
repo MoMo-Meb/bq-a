@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 const bcrypt = require('bcryptjs');
 const saltRounds = 10;
 const sendEmail = require("./sendEmail");
