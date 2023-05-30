@@ -574,6 +574,10 @@ app.post("/inscription_famille", async (req, res) => {
     res.redirect("/e_404");
   }
 });
+
+
+
+
 */
 
 // Route pour afficher la page d'inscription
