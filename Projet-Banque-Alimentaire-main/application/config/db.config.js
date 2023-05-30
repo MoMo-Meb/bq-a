@@ -1,6 +1,6 @@
 module.exports = {
-    HOST: "localhost",
-    USER: "root",
-    PASSWORD: "",
-    DB: "banque_alimentaire"
+    HOST: "sql9.freesqldatabase.com",
+    USER: "sql9622348",
+    PASSWORD: "9Q5LkAvrvs",
+    DB: "sql9622348"
 };

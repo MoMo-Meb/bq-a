@@ -36,30 +36,6 @@ CREATE TABLE Particularity (
 );
 
 -- Table for members
-CREATE TABLE Abonnement (
-    Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    Adresse VARCHAR(100) NOT NULL,
-    Telephone VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    Location INT NOT NULL,
-    Etat ENUM('CompteVierge', 'ConfirmeParEmail', 'ValideParSecretaire', 'Inactif') 
-    NOT NULL DEFAULT 'CompteVierge',
-    FamilyMembers VARCHAR(100),
-    InactifDate TIMESTAMP,
-    FOREIGN KEY (Location) REFERENCES OfficeInfo(Name),
-);
-
-DELIMITER //
-CREATE TRIGGER set_inactif_date
-BEFORE INSERT ON Abonnement
-FOR EACH ROW
-BEGIN
-  IF NEW.InactifDate IS NULL THEN
-    SET NEW.InactifDate = CURRENT_TIMESTAMP + INTERVAL 1 MINUTE;
-  END IF;
-END;
-//
-DELIMITER ;
 
 -- event creation for an abonnement after a 1 minute for a test:
 CREATE EVENT IF NOT EXISTS update_etat_to_inactif
@@ -109,3 +85,15 @@ CREATE TABLE Command (
     FOREIGN KEY (EmployeeId) REFERENCES Users(Id)
 );
 
+CREATE TABLE Abonnement (
+    Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Adresse VARCHAR(100) NOT NULL,
+    Telephone VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Location INT NOT NULL,
+    Etat ENUM('CompteVierge', 'ConfirmeParEmail', 'ValideParSecretaire', 'Inactif') 
+    NOT NULL DEFAULT 'CompteVierge',
+    FamilyMembers VARCHAR(100),
+    InactifDate TIMESTAMP,
+    FOREIGN KEY (Location) REFERENCES OfficeInfo(Name)
+);
