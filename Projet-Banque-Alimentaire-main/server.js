@@ -575,24 +575,33 @@ app.post("/inscription_famille", async (req, res) => {
   }
 });
 */
-
-// Route pour afficher la page d'inscription
-app.get('/test/:datatable', checkAccountAdmin, async (req, res) => {
+app.get('/favicon.ico', (req, res) => {
+  // Serve your favicon here, e.g.:
+  res.sendFile(path.join(__dirname, 'public', 'favicon.ico'));
+});
+app.get('/dynamicform/table/:datatable', checkAccountAdmin, async (req, res) => {
   try {
-    columns = await db_utilities.getColumns(req.params.datatable)
-    if (columns) {
-
-      res.render('form_adapter', {
-        table: req.params.datatable,
-        columns
-      });
+    let tablename  = req.params.datatable;
+    let tables = await db_utilities.getTables(); // you need to await this function
+    let found = tables.some(tuple => tuple.table_name == tablename);
+    if(found){ // check if the array contains the table name
+      let columns = await db_utilities.getColumns(tablename);
+      if (columns) {
+        res.render('form_adapter', {
+          table: tablename,
+          columns
+        });
+        return;
+      }
+    } else {
+      res.send('/404')
       return;
     }
   } catch (err) {
     console.log(err);
   }
-
 });
+
 
 app.post('/submit_dynamic_form', async (req, res) => {
   // Get form data from request body
