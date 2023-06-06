@@ -636,6 +636,7 @@ console.log(tableName);
       success = false;
       const message = "Une erreur est survenue!"
       const redirectUrl = `/confirmation?message=${message}&success=${success}`;
+      console.log(error);
       res.redirect(redirectUrl);
   }
 });
