@@ -609,7 +609,7 @@ app.post('/submit_dynamic_form', async (req, res) => {
 
   // Get the table name
   const tableName = formData.table;
-
+console.log(tableName);
   // Remove the table entry from formData as it's not a column in the table
   delete formData.table;
 
@@ -628,14 +628,14 @@ app.post('/submit_dynamic_form', async (req, res) => {
     } else {
       success = false;
       const message = "Une erreur est survenue!"
-      const redirectUrl = `/confirmation?message=${message}&success=${false}`;
+      const redirectUrl = `/confirmation?message=${message}&success=${success}`;
       res.redirect(redirectUrl);
     }
   } catch (error) {
     // If there's an error, send an error response
       success = false;
       const message = "Une erreur est survenue!"
-      const redirectUrl = `/confirmation?message=${message}&success=${false}`;
+      const redirectUrl = `/confirmation?message=${message}&success=${success}`;
       res.redirect(redirectUrl);
   }
 });
