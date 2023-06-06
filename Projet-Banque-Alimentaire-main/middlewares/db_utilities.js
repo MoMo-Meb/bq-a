@@ -1,5 +1,6 @@
 
 
+const dbConfig = require("../application/config/db.config");
 const base_de_donnees = require("./db")
 
 function getDataFrom(queryTable, arg2 = "*", customWhereClause = "", values = []) {
@@ -89,10 +90,11 @@ async function checkPersonInSubscription(personId){
 
 function getTables() {
     return new Promise((resolve, reject) => {
+        db_name = dbConfig.DB;
         query = `SELECT table_name
     FROM information_schema.tables
     WHERE table_type='BASE TABLE'
-          AND table_schema = 'banque_alimentaire'`
+          AND table_schema = ${db_name}`
         base_de_donnees.query(query, (error, results) => {
             if (error) {
                 reject(error);
@@ -182,7 +184,7 @@ function insertInto(queryTable, data) {
 
 function getOffices() {
     return new Promise((resolve, reject) => {
-        base_de_donnees.query('SELECT * FROM OfficeInfo', (err, rows) => {
+        base_de_donnees.query('SELECT * FROM officeinfo', (err, rows) => {
             if (err) {
                 return reject(err);
             }
@@ -193,7 +195,7 @@ function getOffices() {
 
 function getServices() {
     return new Promise((resolve, reject) => {
-        base_de_donnees.query('SELECT * FROM Services', (err, rows) => {
+        base_de_donnees.query('SELECT * FROM services', (err, rows) => {
             if (err) {
                 return reject(err);
             }
@@ -204,7 +206,7 @@ function getServices() {
 
 function getAbonnements() {
     return new Promise((resolve, reject) => {
-        base_de_donnees.query('SELECT * FROM Abonnement', (err, rows) => {
+        base_de_donnees.query('SELECT * FROM abonnement', (err, rows) => {
             if (err) {
                 return reject(err);
             }
