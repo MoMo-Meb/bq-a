@@ -45,10 +45,10 @@
                 <p>
                     <%=message%>
                 </p>
-                <% if(success){%>
+                <% if(success == "true"){%>
                     <img class="checkcross" src="/images/Check.png" alt="Confirmation Image">
                   <%}else{%>
-                    <img src="/images/Cross.png" alt="Error Image">
+                    <img class="checkcross" src="/images/Cross.png" alt="Confirmation Image">
                   <%}%>
                             <p>Vous serez bientôt redirigé vers la page d'accueil...</p>
             </div>
@@ -57,9 +57,6 @@
     </body>
 
     <script>
-        setTimeout(function () {
-            window.location.href = "/";
-        }, 3000); // 5 seconds
     </script>
 
 </html>

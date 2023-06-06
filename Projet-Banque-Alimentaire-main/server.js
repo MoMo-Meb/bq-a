@@ -609,18 +609,25 @@ app.post('/submit_dynamic_form', async (req, res) => {
     const result = await db_utilities.insertInto(tableName, formData);
 
     // Send success response
-    res.status(200).json({
-      success: true,
-      message: 'Data successfully inserted',
-      data: result
-    });
+
+
+    if (result) {
+      success = true;
+      const message = "Les informations ont été créés avec succès!";
+      const redirectUrl = `/confirmation?message=${message}&success=${success}`;
+      res.redirect(redirectUrl);
+    } else {
+      success = false;
+      const message = "Une erreur est survenue!"
+      const redirectUrl = `/confirmation?message=${message}&success=${false}`;
+      res.redirect(redirectUrl);
+    }
   } catch (error) {
     // If there's an error, send an error response
-    res.status(500).json({
-      success: false,
-      message: 'An error occurred',
-      error: error.message
-    });
+      success = false;
+      const message = "Une erreur est survenue!"
+      const redirectUrl = `/confirmation?message=${message}&success=${false}`;
+      res.redirect(redirectUrl);
   }
 });
 // Route pour afficher la page d'inscription
