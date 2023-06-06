@@ -627,7 +627,7 @@ console.log(tableName);
       res.redirect(redirectUrl);
     } else {
       success = false;
-      const message = "Une erreur est survenue!"
+      const message = "Votre modification n'a pas pu etre fait!"
       const redirectUrl = `/confirmation?message=${message}&success=${success}`;
       res.redirect(redirectUrl);
     }
