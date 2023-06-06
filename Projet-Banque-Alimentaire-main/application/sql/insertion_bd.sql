@@ -1,25 +1,25 @@
-TRUNCATE TABLE Users;
-TRUNCATE TABLE Services;
-TRUNCATE TABLE Particularity;
-TRUNCATE TABLE OfficeInfo;
-TRUNCATE TABLE Abonnement;
-TRUNCATE TABLE Personnes;
+TRUNCATE TABLE users;
+TRUNCATE TABLE services;
+TRUNCATE TABLE particularity;
+TRUNCATE TABLE officeinfo;
+TRUNCATE TABLE abonnement;
+TRUNCATE TABLE personnes;
 
--- Insérer des données d'exemple pour Users
-INSERT INTO Users (FirstName, LastName, Telephone, Email, Password, AccountType, LastAuthentication) VALUES
+-- Insert example data for users
+INSERT INTO users (FirstName, LastName, Telephone, Email, Password, AccountType, LastAuthentication) VALUES
 ('John', 'Doe', '514-123-4567', 'john.doe@example.com', 'password123', 'ADMIN', '2023-04-10'),
 ('Jane', 'Smith', '514-987-6543', 'jane.smith@example.com', 'password123', 'SECRETARY', '2023-04-09'),
 ('Alice', 'Johnson', '514-321-7890', 'alice.johnson@example.com', 'password123', 'ACCOUNTANT', '2023-04-08');
 
--- Insérer des données d'exemple pour Services
-INSERT INTO Services (Name, Description, NumberOfPersons, Price) VALUES
+-- Insert example data for services
+INSERT INTO services (Name, Description, NumberOfPersons, Price) VALUES
 ('Forfait alimentaire de base', 'Un forfait alimentaire de base comprenant des articles non périssables', 1, 10.0),
 ('Forfait alimentaire familial', 'Un forfait alimentaire familial comprenant des articles non périssables', 4, 35.0),
 ('Forfait alimentaire diététique spécial', 'Un forfait alimentaire adapté aux besoins diététiques spécifiques', 1, 15.0),
 ('Abonnement', 'Paiement abonnement à la banque', -1, 25);
 
--- Ajouter les membres de la famille
-INSERT INTO Personnes (LastName, FirstName, Sexe, DateNaissance, Particularities)
+-- Add family members
+INSERT INTO personnes (LastName, FirstName, Sexe, DateNaissance, Particularities)
 VALUES
 ('Doe', 'John', 'Homme', '1975-01-01', 'Diabète, Végétalien'),
 ('Doe', 'Jane', 'Femme', '1980-02-02', 'Végétalien'),
@@ -29,30 +29,29 @@ VALUES
 ('Smith', 'Alice', 'Femme', '1992-06-06', 'Allergie aux produits laitiers, Allergie aux arachides'),
 ('Smith', 'Tom', 'Homme', '2010-07-07', NULL);
 
--- Ajouter les abonnements de la famille de 4 membres
-INSERT INTO Abonnement (Adresse, Telephone, Email, Location, Etat, FamilyMembers)
+-- Add family subscriptions of 4 members
+INSERT INTO abonnement (Adresse, Telephone, Email, Location, Etat, FamilyMembers)
 VALUES
 ('123 Rue Principale', '123-555-1234', 'johndoe@gmail.com', 1, 'ValideParSecretaire', '1,2,3,4'),
-('456 Rue Elm', '123-555-5678', 'bobsmith@gmail.com', 2, 'ValideParSecretaire', '5, 7, 6');
--- Insert default data for Particularities (allergies or illnesses)
-INSERT INTO Particularity (Name, Description) VALUES
+('456 Rue Elm', '123-555-5678', 'bobsmith@gmail.com', 2, 'ValideParSecretaire', '5,7,6');
+
+-- Insert default data for particularities (allergies or illnesses)
+INSERT INTO particularity (Name, Description) VALUES
 ('Allergie aux arachides', 'Allergique aux arachides'),
 ('Intolérance au gluten', 'Intolérance au gluten'),
 ('Allergie aux produits laitiers', 'Allergique aux produits laitiers'),
 ('Diabète', 'Diabétique, nécessite des considérations diététiques spécifiques'),
 ('Végétalien', 'Suit un régime végétalien');
 
--- Insert default data for OfficeInfo (real life address and name)
-INSERT INTO OfficeInfo (Name, Location) VALUES
+-- Insert default data for officeinfo (real life address and name)
+INSERT INTO officeinfo (Name, Location) VALUES
 ('Bureau principal', '123 Main St, New York, NY 10001'),
 ('Succursale du centre-ville', '456 Downtown St, New York, NY 10002'),
 ('Succursale du centre-ville', '789 Uptown Ave, New York, NY 10003'),
 ('Succursale de Brooklyn', '1011 Brooklyn Blvd, Brooklyn, NY 11201'),
 ('Succursale de Queens', '1213 Queens Rd, Queens, NY 11301');
 
-
-
-INSERT INTO Command (AbonnementId, PayerId, CurrentOffice, ServiceId, EmployeeId, Date, Time, Notes) VALUES
+INSERT INTO command (AbonnementId, PayerId, CurrentOffice, ServiceId, EmployeeId, Date, Time, Notes) VALUES
 (5, 7, 2, 3, 2, '2020-01-31', '13:24:00', 'récupération de panier'),
 (5, 7, 4, 3, 2, '2023-01-28', '20:15:00', 'récupération de panier'),
 (5,7, 2, 3, 2, '2023-12-02', '12:20:00', 'récupération de panier'),

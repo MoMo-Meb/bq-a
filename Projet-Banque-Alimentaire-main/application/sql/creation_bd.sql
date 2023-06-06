@@ -1,13 +1,14 @@
 -- Drop existing tables if they exist
-DROP TABLE IF EXISTS OfficeInfo;
-DROP TABLE IF EXISTS Personnes;
-DROP TABLE IF EXISTS Particularity;
-DROP TABLE IF EXISTS Services;
-DROP TABLE IF EXISTS Users;
-DROP TABLE IF EXISTS Abonnement;
+DROP TABLE IF EXISTS officeinfo;
+DROP TABLE IF EXISTS personnes;
+DROP TABLE IF EXISTS particularity;
+DROP TABLE IF EXISTS services;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS command;
+DROP TABLE IF EXISTS abonnement;
 
 -- Table for users
-CREATE TABLE Users (
+CREATE TABLE users (
     Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     FirstName VARCHAR(100) NOT NULL,
     LastName VARCHAR(100) NOT NULL,
@@ -18,9 +19,8 @@ CREATE TABLE Users (
     LastAuthentication DATE NOT NULL
 );
 
-
 -- Table for services
-CREATE TABLE Services (
+CREATE TABLE services (
     Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
     Description TEXT NOT NULL,
@@ -29,45 +29,42 @@ CREATE TABLE Services (
 );
 
 -- Table for particularities
-CREATE TABLE Particularity (
+CREATE TABLE particularity (
     Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
     Description TEXT NOT NULL
 );
 
--- Table for members
-
--- event creation for an abonnement after a 1 minute for a test:
-CREATE EVENT IF NOT EXISTS update_etat_to_inactif
-ON SCHEDULE
-  EVERY 1 MINUTE
-  STARTS CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
-COMMENT 'Yearly update of Etat to inactif'
-DO
-  UPDATE Abonnement
-  SET Etat = 'Inactif'
-  WHERE Etat != 'Inactif' AND inactifDate <= CURRENT_TIMESTAMP;
-
-
-CREATE TABLE Personnes (
+-- Table for membres
+CREATE TABLE personnes (
     Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     LastName VARCHAR(100) NOT NULL,
     FirstName VARCHAR(100) NOT NULL,
     Sexe ENUM('Homme', 'Femme') NOT NULL DEFAULT 'Homme',
     DateNaissance DATE NOT NULL,
-    Particularities VARCHAR(255),
+    Particularities VARCHAR(255)
 );
 
-
 -- Table for additional member information
-CREATE TABLE OfficeInfo (
+CREATE TABLE officeinfo (
     Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     Name VARCHAR(100) NOT NULL,
     Location VARCHAR(100) NOT NULL
 );
 
-DROP TABLE IF EXISTS Command;
-CREATE TABLE Command (
+CREATE TABLE abonnement (
+    Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    Adresse VARCHAR(100) NOT NULL,
+    Telephone VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) NOT NULL,
+    Location INT NOT NULL,
+    Etat ENUM('CompteVierge', 'ConfirmeParEmail', 'ValideParSecretaire', 'Inactif') 
+    NOT NULL DEFAULT 'CompteVierge',
+    FamilyMembers VARCHAR(100),
+    InactifDate TIMESTAMP
+);
+
+CREATE TABLE command (
     Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     AbonnementId INT NOT NULL,
     PayerId INT NOT NULL,
@@ -78,22 +75,20 @@ CREATE TABLE Command (
     Date DATE NOT NULL,
     Time TIME NOT NULL,
     Notes TEXT,
-    FOREIGN KEY (AbonnementId) REFERENCES Abonnement(Id),
-    FOREIGN KEY (PayerId) REFERENCES Personnes(Id),
-    FOREIGN KEY (CurrentOffice) REFERENCES OfficeInfo(Id),
-    FOREIGN KEY (ServiceId) REFERENCES Services(Id),
-    FOREIGN KEY (EmployeeId) REFERENCES Users(Id)
+    FOREIGN KEY (AbonnementId) REFERENCES abonnement(Id),
+    FOREIGN KEY (PayerId) REFERENCES personnes(Id),
+    FOREIGN KEY (CurrentOffice) REFERENCES officeinfo(Id),
+    FOREIGN KEY (ServiceId) REFERENCES services(Id),
+    FOREIGN KEY (EmployeeId) REFERENCES users(Id)
 );
 
-CREATE TABLE Abonnement (
-    Id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    Adresse VARCHAR(100) NOT NULL,
-    Telephone VARCHAR(100) NOT NULL,
-    Email VARCHAR(100) NOT NULL,
-    Location INT NOT NULL,
-    Etat ENUM('CompteVierge', 'ConfirmeParEmail', 'ValideParSecretaire', 'Inactif') 
-    NOT NULL DEFAULT 'CompteVierge',
-    FamilyMembers VARCHAR(100),
-    InactifDate TIMESTAMP,
-    FOREIGN KEY (Location) REFERENCES OfficeInfo(Name)
-);
+-- event creation for an abonnement after a 1 minute for a test:
+CREATE EVENT IF NOT EXISTS update_etat_to_inactif
+ON SCHEDULE
+  EVERY 1 MINUTE
+  STARTS CURRENT_TIMESTAMP + INTERVAL 1 MINUTE
+COMMENT 'Yearly update of Etat to inactif'
+DO
+  UPDATE abonnement
+  SET Etat = 'Inactif'
+  WHERE Etat != 'Inactif' AND InactifDate <= CURRENT_TIMESTAMP;

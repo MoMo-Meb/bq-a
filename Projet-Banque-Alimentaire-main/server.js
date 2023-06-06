@@ -574,10 +574,6 @@ app.post("/inscription_famille", async (req, res) => {
     res.redirect("/e_404");
   }
 });
-
-
-
-
 */
 
 // Route pour afficher la page d'inscription
@@ -652,7 +648,7 @@ app.get('/testingngchangesform', (req, res) => {
   res.render("formtest");
 });
 // Route pour afficher la page d'inscription
-app.get('/register', checkAuthenticated, (req, res) => {
+app.get('/register', checkAccountAdmin, (req, res) => {
   res.render('register.ejs');
 });
 
@@ -956,7 +952,7 @@ app.get('/commande_input', checkAuthenticated, async (req, res) => {
     } else {
       res.status(401).send('Unauthorized');
     }
-  } catch (errùor) {
+  } catch (error) {
     console.log(error);
     res.status(500).send("Erreur lors de la récupération des données");
   }
@@ -1241,6 +1237,7 @@ app.get('/rapport/commande_history', checkAccountSecretaire, async (req, res) =>
     const offices = await db_utilities.getDataFrom('officeinfo');
     const services = await db_utilities.getDataFrom('services');
     const users = await db_utilities.getDataFrom('users');
+    console.log(commandes[0]);
 
     res.render("details_commandes_history", {
       commandes, abonnements, personnes, offices, services, users

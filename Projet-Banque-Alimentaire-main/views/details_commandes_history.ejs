@@ -175,19 +175,8 @@
                                         <% const currentEmployee=users.find(user=> user.Id === commandes[i].EmployeeId);
                                             %>
                                             <% const Etat=commandes[i].Etat; %>
-                                                <% const familyMembers=currentAbonnement.FamilyMembers !=undefined?
-                                                    currentAbonnement.FamilyMembers.split(',').map(abonnementid=>
-                                                    parseInt(abonnementid.trim())) : ""; %>
-                                                    <% const
-                                                        lastFamilyMember=parseInt(currentAbonnement.FamilyMembers.trim().split(',').pop().trim());
-                                                        %>
-                                                        <% if (!isNaN(lastFamilyMember) && lastFamilyMember
-                                                            !==familyMembers[0]) { %>
-                                                            <% familyMembers.push(lastFamilyMember); %>
-                                                                <% } %>
-                                                                    <% const firstMember=personnes.find(person=>
-                                                                        person.Id
-                                                                        === familyMembers[0]); %>
+                                               
+                                                <% const firstMember = undefined%>
                                                                         <tr class="sort-row"
                                                                             id="commande-<%= commandes[i].Id %>">
                                                                             <td>
