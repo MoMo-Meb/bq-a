@@ -1251,7 +1251,7 @@ app.get('/rapport/commande_history', checkAccountSecretaire, async (req, res) =>
     });
   } catch (error) {
     console.error('Error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.redirect('/404');
   }
 });
 

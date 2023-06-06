@@ -154,7 +154,7 @@
             <table>
                 <tr>
                     <th class="head-filter" data-sort="Id">ID</th>
-                    <th class="head-filter" data-sort="MemberName">Member Name</th>
+                    <th class="head-filter" data-sort="MemberName">Email d'Abonnement</th>
                     <th class="head-filter" data-sort="ServiceName">Service Name</th>
                     <th class="head-filter" data-sort="OfficeName">Office Name</th>
                     <th class="head-filter" data-sort="ServicePrice">Service Price</th>
@@ -176,15 +176,13 @@
                                             %>
                                             <% const Etat=commandes[i].Etat; %>
                                                
-                                                <% const firstMember = undefined%>
                                                                         <tr class="sort-row"
                                                                             id="commande-<%= commandes[i].Id %>">
                                                                             <td>
                                                                                 <%= commandes[i].Id %>
                                                                             </td>
                                                                             <td>
-                                                                                <%= firstMember ? firstMember.FirstName
-                                                                                    + ' ' + firstMember.LastName : 'N/A'
+                                                                                <%= currentAbonnement ? currentAbonnement.Email : 'N/A'
                                                                                     %>
                                                                             </td>
                                                                             <td>
