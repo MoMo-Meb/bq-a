@@ -94,7 +94,7 @@ function getTables() {
         query = `SELECT table_name
     FROM information_schema.tables
     WHERE table_type='BASE TABLE'
-          AND table_schema = ${db_name}`
+          AND table_schema = '${db_name}'`
         base_de_donnees.query(query, (error, results) => {
             if (error) {
                 reject(error);
